@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @interface CNScrabbleTile : UIView
-{
-    UILabel *letterLabel;
-}
 
+@property (nonatomic, strong) UILabel *letterLabel;
+@property (nonatomic, strong) UILabel *pointLabel;
 @property (nonatomic, assign) CGPoint coord;
 
 - (id)initWithFrame:(CGRect)frame letter:(NSString*)letter;
 - (NSInteger)letterValue;
+- (NSNumber*)getX;
+- (NSNumber*)getY;
 
 @end

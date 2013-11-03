@@ -15,19 +15,58 @@
                     <view key="view" contentMode="scaleToFill" id="2VE-Yg-loa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SgO-2l-r4W" userLabel="Tile Rack">
+                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="b2G-hy-q0M"/>
+                                </constraints>
+                            </view>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NqV-gD-8S1" userLabel="Settings View">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-9G-enb">
+                                        <rect key="frame" x="10" y="10" width="300" height="484"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="qoB-9G-enb" firstAttribute="top" secondItem="NqV-gD-8S1" secondAttribute="top" constant="10" id="E56-yf-Aqg"/>
+                                    <constraint firstItem="qoB-9G-enb" firstAttribute="leading" secondItem="NqV-gD-8S1" secondAttribute="leading" constant="10" id="GQA-Dp-Fm3"/>
+                                    <constraint firstAttribute="trailing" secondItem="qoB-9G-enb" secondAttribute="trailing" constant="10" id="iae-37-HTd"/>
+                                    <constraint firstAttribute="bottom" secondItem="qoB-9G-enb" secondAttribute="bottom" constant="10" id="oJy-8X-QVc"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="NqV-gD-8S1" secondAttribute="trailing" id="1Mi-NG-TAx"/>
+                            <constraint firstAttribute="bottom" secondItem="NqV-gD-8S1" secondAttribute="bottom" id="1cb-Qz-3hy"/>
+                            <constraint firstItem="NqV-gD-8S1" firstAttribute="top" secondItem="2VE-Yg-loa" secondAttribute="top" constant="64" id="UWG-Nq-icL"/>
+                            <constraint firstAttribute="bottom" secondItem="SgO-2l-r4W" secondAttribute="bottom" id="Xen-rU-bbn"/>
+                            <constraint firstItem="NqV-gD-8S1" firstAttribute="leading" secondItem="2VE-Yg-loa" secondAttribute="leading" id="n1X-3R-aS9"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="u1e-5L-l1D"/>
                     <navigationItem key="navigationItem" id="f77-sc-vE2"/>
+                    <connections>
+                        <outlet property="settingsView" destination="NqV-gD-8S1" id="lv3-gb-Nbo"/>
+                        <outlet property="tileRack" destination="SgO-2l-r4W" id="VG9-ox-rAz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qh2-T1-AhA" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="207" y="38"/>
+            <point key="canvasLocation" x="172" y="214"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="345-gr-Otn">
             <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="h4V-14-Vj8" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="h4V-14-Vj8" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="88q-GL-SMU">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

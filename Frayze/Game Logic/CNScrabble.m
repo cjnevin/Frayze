@@ -7,17 +7,26 @@
 //
 
 #import "CNScrabble.h"
+#import "CNScrabbleTile.h"
+#import "NSArray+NumberComparison.h"
+#import <objc/message.h>
 
 #define DOUBLE_UP false
 
 @interface CNScrabble()
-{
-    NSMutableArray *tiles;
-    NSMutableArray *board;
-}
+
 @end
 
 @implementation CNScrabble
+
+@synthesize words;
+@synthesize board;
+@synthesize delegate;
+@synthesize drawnTiles;
+@synthesize droppedTiles;
+@synthesize bagTiles;
+@synthesize playedTiles;
+@synthesize draggedTile;
 
 + (NSDictionary*)letterDistribution
 {
@@ -38,8 +47,8 @@
     static NSDictionary *values = nil;
     if (!values) {
         values = @{@"aeilnorstu": @1,
-                   @"dgm": @2,
-                   @"bcp": @3,
+                   @"dg": @2,
+                   @"bcmp": @3,
                    @"fhvwy": @4,
                    @"k": @5,
                    @"j": @8,
@@ -48,35 +57,23 @@
     return values;
 }
 
-- (id)init
+- (id)initWithDelegate:(id<CNScrabbleDelegate>)_delegate
 {
     self = [super init];
     if (self) {
-        [self resetBoard];
-        [self resetTiles];
+        delegate = _delegate;
     }
     return self;
 }
 
-- (BOOL)is:(NSUInteger)a inItems:(NSUInteger*)items
+- (void)resetGame
 {
-    for (NSInteger i = 0; i < sizeof(items); i++) {
-        if (a == items[i]) {
-            return YES;
-        }
-    }
-    return NO;
+    [self resetBoard];
+    [self resetTiles];
+    [self drawTiles];
 }
 
-- (NSArray*)board
-{
-    return board;
-}
-
-- (NSUInteger)tilesInRack
-{
-    return 7;
-}
+#pragma mark - Board
 
 - (NSUInteger)boardSize
 {
@@ -88,10 +85,10 @@
 
 - (void)resetBoard
 {
-    // TODO: Make this dynamic, so we can support all different sizes
+    droppedTiles = [NSMutableSet set];
     board = [NSMutableArray array];
     NSUInteger dim = [self boardSize];
-    NSInteger mid = dim / 2 + 1;
+    NSInteger mid = (dim + 1) / 2;
     NSInteger qtr = mid / 2;
     NSInteger two = mid / 4;
     NSInteger six = two * 3;
@@ -141,30 +138,395 @@
         [board addObject:row];
     }
     NSLog(@"Total Squares: %d", dim * dim);
+    [delegate boardReset];
 }
 
-- (void)resetTiles
-{
-    tiles = [NSMutableArray array];
-    NSDictionary *distribution = [[self class] letterDistribution];
-    for (NSString *letter in [distribution allKeys]) {
-        for (NSInteger x = 0; x < [distribution[letter] integerValue]; x++) {
-            [tiles addObject:letter];
-        }
-    }
-    NSLog(@"Total Tiles: %d", tiles.count);
-}
+#pragma mark - Tiles
 
 - (NSArray*)draw:(NSInteger)amount
 {
     NSMutableArray *drawn = [NSMutableArray array];
     for (NSInteger x = 0; x < amount; x++) {
-        if (tiles.count > 0) {
-            NSInteger t = arc4random() % tiles.count;
-            [drawn addObject:tiles[t]];
+        if (bagTiles.count > 0) {
+            NSInteger t = arc4random() % bagTiles.count;
+            [drawn addObject:bagTiles[t]];
         }
     }
     return drawn;
+}
+
+- (void)drawTiles
+{
+    if (!drawnTiles) drawnTiles = [NSMutableArray array];
+    NSUInteger amount = [self tilesInRack] - [drawnTiles count];
+    NSArray *newTiles = [self draw:amount];
+    for (NSString *tile in newTiles) {
+        CNScrabbleTile *newTile = [[CNScrabbleTile alloc] initWithFrame:CGRectMake(0, 0, 40, 40) letter:tile];
+        [drawnTiles addObject:newTile];
+        [delegate drewTile:newTile];
+    }
+    [delegate drewTiles];
+}
+
+- (BOOL)isEmptyAtPoint:(CGPoint)point
+{
+    BOOL filled = NO;
+    // Check if tile is already in this square
+    for (CNScrabbleTile *tile in droppedTiles) {
+        if (tile != draggedTile) {
+            if (CGPointEqualToPoint(tile.center, point)) {
+                filled = YES;
+                break;
+            }
+        }
+    }
+    // Check if word is already in this square
+    if (!filled) {
+        for (NSDictionary *word in words) {
+            CGRect rect = CGRectFromString(word[@"rect"]);
+            if (CGRectContainsPoint(rect, point)) {
+                filled = YES;
+                break;
+            }
+        }
+    }
+    return !filled;
+}
+
+- (CGRect)rectForTiles:(NSArray*)tiles
+{
+    CGFloat miny = CGFLOAT_MAX, minx = CGFLOAT_MAX;
+    CGFloat maxx = 0, maxy = 0;
+    for (CNScrabbleTile *tile in tiles) {
+        maxx = MAX(maxx, CGRectGetMaxX(tile.frame));
+        maxy = MAX(maxy, CGRectGetMaxY(tile.frame));
+        minx = MIN(minx, CGRectGetMinX(tile.frame));
+        miny = MIN(miny, CGRectGetMinY(tile.frame));
+    }
+    return CGRectMake(minx, miny, maxx - minx, maxy - miny);
+}
+
+- (void)resetTiles
+{
+    bagTiles = [NSMutableArray array];
+    NSDictionary *distribution = [[self class] letterDistribution];
+    for (NSString *letter in [distribution allKeys]) {
+        for (NSInteger x = 0; x < [distribution[letter] integerValue]; x++) {
+            [bagTiles addObject:letter];
+        }
+    }
+    NSLog(@"Total Tiles: %d", bagTiles.count);
+}
+
+- (NSUInteger)tilesInRack
+{
+    return 7;
+}
+
+- (BOOL)tilesAreHorizontallyArranged:(NSArray*)tiles
+{
+    CGPoint lastPoint = CGPointZero;
+    for (CNScrabbleTile *tile in tiles) {
+        if (!CGPointEqualToPoint(CGPointZero, lastPoint)) {
+            if (tile.coord.y != lastPoint.y) {
+                return NO;
+            }
+        }
+        lastPoint = tile.coord;
+    }
+    return YES;
+}
+
+- (BOOL)tilesAreVerticallyArranged:(NSArray*)tiles
+{
+    CGPoint lastPoint = CGPointZero;
+    for (CNScrabbleTile *tile in tiles) {
+        if (!CGPointEqualToPoint(CGPointZero, lastPoint)) {
+            if (tile.coord.x != lastPoint.x) {
+                return NO;
+            }
+        }
+        lastPoint = tile.coord;
+    }
+    return YES;
+}
+
+- (NSInteger)wordValueForTiles:(NSArray*)tiles dropped:(NSArray*)dropped
+{
+    NSInteger wordValue = 0;
+    NSInteger wordMultiplier = 1;
+    for (CNScrabbleTile *tile in tiles) {
+        NSInteger letterMultiplier = 1;
+        if ([dropped containsObject:tile]) {
+            letterMultiplier = [self letterMultiplierForSquare:tile.coord];
+        }
+        wordMultiplier *= [self wordMultiplierForSquare:tile.coord];
+        wordValue += (letterMultiplier * tile.letterValue);
+    }
+    wordValue *= wordMultiplier;
+    return wordValue;
+}
+
+- (NSUInteger)matchingObjectsInArray:(NSArray*)a withArray:(NSArray*)b
+{
+    NSUInteger match = 0;
+    for (NSObject *_a in a) {
+        if ([b containsObject:_a]) match++;
+    }
+    return match;
+}
+
+- (CNScrabbleTile*)getTileAtX:(NSInteger)x y:(NSInteger)y
+{
+    NSUInteger s = [self boardSize];
+    if (x > 0 && x <= s && y > 0 && y <= s) {
+        for (CNScrabbleTile *tile in playedTiles) {
+            if (CGPointEqualToPoint(CGPointMake(x, y), tile.coord)) {
+                return tile;
+            }
+        }
+        for (CNScrabbleTile *tile in droppedTiles) {
+            if (CGPointEqualToPoint(CGPointMake(x, y), tile.coord)) {
+                return tile;
+            }
+        }
+    }
+    return nil;
+}
+
+- (CNScrabbleTile*)getTileAtX:(NSInteger)x y:(NSInteger)y inArray:(NSArray*)array
+{
+    NSUInteger s = [self boardSize];
+    if (x > 0 && x <= s && y > 0 && y <= s) {
+        for (CNScrabbleTile *tile in array) {
+            if (CGPointEqualToPoint(CGPointMake(x, y), tile.coord)) {
+                return tile;
+            }
+        }
+    }
+    return nil;
+}
+
+- (NSArray*)getTilesAtY:(NSInteger)y inArray:(NSArray*)arr
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (CNScrabbleTile *tile in arr) {
+        if (tile.coord.y == y) [array addObject:tile];
+    }
+    return [array sortedArrayUsingComparator:^NSComparisonResult(CNScrabbleTile* obj1, CNScrabbleTile* obj2) {
+        return [obj1.getX compare:obj2.getX];
+    }];
+}
+
+- (NSArray*)getTilesAtX:(NSInteger)x inArray:(NSArray*)arr
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (CNScrabbleTile *tile in arr) {
+        if (tile.coord.x == x) [array addObject:tile];
+    }
+    return [array sortedArrayUsingComparator:^NSComparisonResult(CNScrabbleTile* obj1, CNScrabbleTile* obj2) {
+        return [obj1.getY compare:obj2.getY];
+    }];
+}
+
+- (void)getAdjacentTiles:(NSMutableSet**)target
+                       x:(NSUInteger)x
+                       y:(NSUInteger)y
+                       v:(BOOL)v
+                       h:(BOOL)h
+                original:(CNScrabbleTile*)original
+{
+    CNScrabbleTile *tile = [self getTileAtX:x y:y];
+    if (tile != nil && (tile == original || ![*target containsObject:tile])) {
+        [*target addObject:tile];
+        if (h) {
+            [self getAdjacentTiles:target x:x + 1 y:y v:v h:h original:original];
+            [self getAdjacentTiles:target x:x - 1 y:y v:v h:h original:original];
+        }
+        if (v) {
+            [self getAdjacentTiles:target x:x y:y + 1 v:v h:h original:original];
+            [self getAdjacentTiles:target x:x y:y - 1 v:v h:h original:original];
+        }
+    }
+}
+
+- (void)printTilesInArray:(NSArray*)tiles
+{
+    // Print results
+    NSUInteger dim = [self boardSize];
+    for (NSInteger y = 1; y <= dim; y++) {
+        NSMutableString *line = [NSMutableString string];
+        for (NSInteger x = 1; x <= dim; x++) {
+            CGPoint pt = CGPointMake(x, y);
+            BOOL found = NO;
+            for (CNScrabbleTile *tile in tiles) {
+                if (CGPointEqualToPoint(pt, tile.coord)) {
+                    found = YES;
+                    [line appendString:tile.letterLabel.text];
+                    break;
+                }
+            }
+            if (!found) {
+                [line appendString:@" "];
+            }
+        }
+        NSLog(@"%@", line);
+    }
+}
+
+- (NSString*)getWord:(NSArray*)tiles
+{
+    NSMutableString *buffer = [NSMutableString string];
+    for (CNScrabbleTile* tile in tiles) {
+        [buffer appendString:tile.letterLabel.text];
+    }
+    return buffer;
+}
+
+#pragma mark - Score
+
+- (NSInteger)letterMultiplierForSquare:(CGPoint)coord
+{
+    NSInteger multiplier = 1;
+    NSInteger x = coord.x, y = coord.y;
+    SquareType type = [board[y][x] integerValue];
+    if (type == SQ_TRIPLE_LETTER) {
+        multiplier = 3;
+    } else if (type == SQ_DOUBLE_LETTER) {
+        multiplier = 2;
+    }
+    return multiplier;
+}
+
+- (NSInteger)wordMultiplierForSquare:(CGPoint)coord
+{
+    NSInteger multiplier = 1;
+    NSInteger x = coord.x, y = coord.y;
+    SquareType type = [board[y][x] integerValue];
+    if (type == SQ_TRIPLE_WORD) {
+        multiplier = 3;
+    } else if (type == SQ_DOUBLE_WORD || type == SQ_CENTER) {
+        multiplier = 2;
+    }
+    return multiplier;
+}
+
+- (NSInteger)calculateScore:(BOOL)auditing
+{
+    NSInteger score = 0;
+    // Ensure that tiles are in same row or column
+    NSArray *tiles = [droppedTiles allObjects];
+    BOOL horizontal = [self tilesAreHorizontallyArranged:tiles];
+    BOOL vertical = [self tilesAreVerticallyArranged:tiles];
+    if (!horizontal && !vertical) {
+        return 0;
+    }
+    // Determine tiles adjacent to dropped tiles
+    NSMutableSet *adjacent = [NSMutableSet set];
+    CNScrabbleTile *tile = [droppedTiles anyObject];
+    [self getAdjacentTiles:&adjacent x:tile.coord.x y:tile.coord.y v:YES h:NO original:tile];
+    [self getAdjacentTiles:&adjacent x:tile.coord.x y:tile.coord.y v:NO h:YES original:tile];
+    
+    // This set must include all dropped tiles, otherwise they aren't connected
+    if ([self matchingObjectsInArray:[adjacent allObjects] withArray:[droppedTiles allObjects]] == [droppedTiles count]) {
+        [adjacent removeAllObjects];
+        // Ensure that there is a center tile
+        NSInteger mid = ([self boardSize] + 1) / 2;
+        CNScrabbleTile *midTile = [self getTileAtX:mid y:mid];
+        if (!midTile) {
+            // Tiles must intersect center of board
+            NSLog(@"Tile must intersect center of the board.");
+            return 0;
+        }
+        
+        // Ensure that tiles intersect the center of the board
+        for (CNScrabbleTile *dTile in droppedTiles) {
+            [self getAdjacentTiles:&adjacent x:dTile.coord.x y:dTile.coord.y v:YES h:YES original:dTile];
+        }
+        midTile = [self getTileAtX:mid y:mid inArray:[adjacent allObjects]];
+        if (!midTile) {
+            // Tiles must intersect center of board
+            NSLog(@"Tile must intersect with tiles that intersect with the center tile.");
+            return 0;
+        }
+        
+        // Remove all objects, so we can find the connected tiles
+        [adjacent removeAllObjects];
+        // Now collect all dropped tiles in both directions
+        for (CNScrabbleTile *dTile in droppedTiles) {
+            [self getAdjacentTiles:&adjacent x:dTile.coord.x y:dTile.coord.y v:YES h:NO original:dTile];
+            [self getAdjacentTiles:&adjacent x:dTile.coord.x y:dTile.coord.y v:NO h:YES original:dTile];
+        }
+        // Calculate score for word
+        NSArray *adjArray = [adjacent allObjects];
+        if (vertical) {
+            NSArray *word = [self getTilesAtX:tile.coord.x inArray:adjArray];
+            if (!auditing) {
+                NSLog(@"WordX = %@", [self getWord:word]);
+                [self.delegate highlightTiles:word];
+            }
+            score += [self wordValueForTiles:word dropped:tiles];
+            // Calculate horizontal words for each letter
+            for (CNScrabbleTile *dTile in droppedTiles) {
+                word = [self getTilesAtY:dTile.coord.y inArray:adjArray];
+                if (word.count > 1) {
+                    if (!auditing) {
+                        NSLog(@"WordY = %@", [self getWord:word]);
+                        [self.delegate highlightTiles:word];
+                    }
+                    score += [self wordValueForTiles:word dropped:tiles];
+                }
+            }
+        } else {
+            NSArray *word = [self getTilesAtY:tile.coord.y inArray:adjArray];
+            if (!auditing) {
+                NSLog(@"WordY = %@", [self getWord:word]);
+                [self.delegate highlightTiles:word];
+            }
+            score += [self wordValueForTiles:word dropped:tiles];
+            // Calculate vertical words for each letter
+            for (CNScrabbleTile *dTile in droppedTiles) {
+                word = [self getTilesAtX:dTile.coord.x inArray:adjArray];
+                if (word.count > 1) {
+                    if (!auditing) {
+                        NSLog(@"WordX = %@", [self getWord:word]);
+                        [self.delegate highlightTiles:word];
+                    }
+                    score += [self wordValueForTiles:word dropped:tiles];
+                }
+            }
+        }
+    }
+    return score;
+}
+
+- (BOOL)canSubmit
+{
+    // Validate
+    if (droppedTiles.count == 0 || [self calculateScore:YES] < 1) {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)submit
+{
+    // Store word
+    CGRect rect = [self rectForTiles:[droppedTiles allObjects]];
+    NSDictionary *word = @{@"rect": NSStringFromCGRect(rect), @"tiles": droppedTiles};
+    if (!words) words = [NSMutableArray array];
+    if (!playedTiles) playedTiles = [NSMutableArray array];
+    [words addObject:word];
+    [playedTiles addObjectsFromArray:[droppedTiles allObjects]];
+    
+    // Strip gestures
+    for (CNScrabbleTile *tile in droppedTiles) {
+        tile.gestureRecognizers = nil;
+    }
+    [droppedTiles removeAllObjects];
+    
+    // Replace tiles in rack
+    [self drawTiles];
 }
 
 @end

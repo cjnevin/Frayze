@@ -68,6 +68,12 @@ UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
 
 #pragma mark - Tile
 
++ (UIColor*)tileHighlight
+{
+    return rgb(147,112,219);
+    return rgb(50,205,50);
+}
+
 + (UIColor*)tileColor
 {
     return rgb(238,221,130);

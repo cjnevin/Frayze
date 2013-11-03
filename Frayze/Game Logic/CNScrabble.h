@@ -9,15 +9,43 @@
 #import <Foundation/Foundation.h>
 #import "CNScrabbleSquare.h"
 
+@class CNScrabbleTile;
+
+@protocol CNScrabbleDelegate <NSObject>
+
+- (void)highlightTiles:(NSArray*)tiles;
+
+- (void)boardReset;
+
+- (void)drewTile:(CNScrabbleTile*)tile;
+- (void)drewTiles;
+
+@end
+
 @interface CNScrabble : NSObject
+
+@property (nonatomic, assign) id<CNScrabbleDelegate> delegate;
+@property (nonatomic, strong) NSMutableArray *words;
+@property (nonatomic, strong) NSMutableArray *drawnTiles;
+@property (nonatomic, strong) NSMutableSet *droppedTiles;
+@property (nonatomic, strong) NSMutableArray *board;
+@property (nonatomic, strong) NSMutableArray *bagTiles;
+@property (nonatomic, strong) NSMutableArray *playedTiles;
+@property (nonatomic, strong) CNScrabbleTile *draggedTile;    // Tile being dragged
 
 + (NSDictionary*)letterValues;
 
-- (NSArray*)board;
+- (id)initWithDelegate:(id<CNScrabbleDelegate>)_delegate;
 - (NSUInteger)boardSize;
 
-- (NSArray*)draw:(NSInteger)amount;
-- (void)resetTiles;
+- (CNScrabbleTile*)getTileAtX:(NSInteger)x y:(NSInteger)y;
+- (CGRect)rectForTiles:(NSArray*)tiles;
+- (BOOL)isEmptyAtPoint:(CGPoint)point;
+- (BOOL)canSubmit;
+- (void)submit;
+- (NSInteger)calculateScore:(BOOL)auditing;
+- (void)drawTiles;
+- (void)resetGame;
 - (NSUInteger)tilesInRack;
 
 @end

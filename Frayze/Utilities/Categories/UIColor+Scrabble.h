@@ -17,6 +17,7 @@
 + (UIColor*)centerColor;
 + (UIColor*)squareColor;
 + (UIColor*)squareBorderColor;
++ (UIColor*)tileHighlight;
 + (UIColor*)tileColor;
 + (UIColor*)tileBorderColor;
 + (UIColor*)tileTextColor;

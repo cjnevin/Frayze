@@ -10,6 +10,10 @@
 #import "CNScrabble.h"
 #import "CNScrabbleTile.h"
 
-@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate, UITableViewDataSource, UITableViewDelegate>
+{
+    IBOutlet UIView *tileRack, *settingsView;
+    IBOutlet UIScrollView *settingsTable;
+}
 
 @end
