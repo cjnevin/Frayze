@@ -44,6 +44,33 @@
             [v.layer setBorderColor:[UIColor tileHighlight].CGColor];
         }
     }
+    if (latticeImage) {
+        [latticeImage removeFromSuperview];
+    }
+    latticeImage = [[UIImageView alloc] initWithImage:[self createLattice]];
+    [boardContainer addSubview:latticeImage];
+}
+
+- (UIImage*)createLattice
+{
+    CGRect bounds = CGRectMake(0, 0, 600, 600);
+    UIGraphicsBeginImageContext(bounds.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 1);
+    [[UIColor squareBorderColor] setStroke];
+    for (NSInteger i = 0; i <= 600; i+= 40) {
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, i, 0);
+        CGContextAddLineToPoint(context, i, 600);
+        CGContextStrokePath(context);
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, 0, i);
+        CGContextAddLineToPoint(context, 600, i);
+        CGContextStrokePath(context);
+    }
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 - (void)viewDidLoad
@@ -67,9 +94,12 @@
     [boardScroller.layer setBorderWidth:1.0f];
     
     UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPressed:)];
+    UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(shufflePressed:)];
     UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(settingsPressed:)];
-    [self.navigationItem setLeftBarButtonItems:@[settings]];
-    [self.navigationItem setRightBarButtonItems:@[play]];
+    UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(infoPressed:)];
+    
+    [self.navigationItem setLeftBarButtonItems:@[settings, shuffle]];
+    [self.navigationItem setRightBarButtonItems:@[play, info]];
     [self.navigationItem setTitle:@"Frayze"];
     
     [self.view bringSubviewToFront:tileRack];
@@ -80,9 +110,9 @@
     settingsTable.delegate = settingsDataSource;
     
     // Finally setup the scrabble board
+    [self applyTheme];
     scrabble = [[CNScrabble alloc] initWithDelegate:self];
     [scrabble resetGame];
-    [self applyTheme];
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,6 +135,9 @@
 
 - (void)boardReset
 {
+    currentScore = 0;
+    [scoreLabel setText:@"0"];
+    [cpuScoreLabel setText:@"0"];
     [boardContainer.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGSize size = CGSizeMake(600, 600);
     [boardContainer setFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -121,6 +154,7 @@
             [boardContainer addSubview:square];
         }
     }
+    [boardContainer addSubview:latticeImage];
     [boardScroller setZoomScale:0.5f];
 }
 
@@ -151,6 +185,11 @@
     }
 }
 
+- (void)tilesReset
+{
+    [self removeHighlights];
+}
+
 - (void)highlightTiles:(NSArray *)tiles
 {
     CGRect rect = [scrabble rectForTiles:tiles];
@@ -179,6 +218,16 @@
     [self applyTheme];
 }
 
+- (void)infoPressed:(id)sender
+{
+    
+}
+
+- (void)shufflePressed:(id)sender
+{
+    
+}
+
 - (void)playPressed:(id)sender
 {
     if (![scrabble canSubmit]) {
@@ -193,11 +242,23 @@
 
 - (void)settingsPressed:(id)sender
 {
+    // TODO: Prompt if user wants to commit these changes and lose their current game
+    static NSInteger oldGameType = -1;
+    static NSInteger oldTileCount = -1;
+    NSInteger newGameType = [[SettingsDataSource sharedInstance] gameTypeIndex];
+    NSInteger newTileCount = [[SettingsDataSource sharedInstance] countIndex];
     CGFloat alpha = 1.0f;
     [UIView animateWithDuration:0.5f animations:^{
         if (settingsView.alpha == alpha) {
+            if (oldGameType != newGameType || oldTileCount != newTileCount) {
+                oldTileCount = newTileCount;
+                oldGameType = newGameType;
+                [scrabble resetGame];
+            }
             settingsView.alpha = 0.0f;
         } else {
+            oldGameType = newGameType;
+            oldTileCount = newTileCount;
             settingsView.alpha = alpha;
         }
     }];
@@ -215,44 +276,44 @@
             [boardScroller zoomToRect:brect animated:YES];
         }
     }
-
+    
 }
 
 - (void)moveBoard
 {
     return;
     /*
-    CGPoint pt = [self.view convertPoint:draggedTile.center fromView:draggedTile.superview];
-    if (CGRectContainsPoint(boardScroller.frame, pt)) {
-        CGPoint bpt = [boardContainer convertPoint:draggedTile.center fromView:draggedTile.superview];
-        if (boardScroller.zoomScale == 1.0f) {
-            CardinalDirections direction = [boardScroller getDirectionForEdgeWithPoint:bpt];
-            if (direction != D_NONE) {*/
-                // Wait in hover zone for 1s before scrolling
-                // Should queue a selector and cancel if user moves outside of this zone
-                /*static NSTimeInterval hover = 0;
-                 static CGFloat delay = 0.5f;
-                 NSTimeInterval currTime = [[NSDate date] timeIntervalSince1970];
-                 if (hover == 0.0f) {
-                 hover = currTime;
-                 return;
-                 }
-                 if (currTime - hover > delay) {
-                 hover = currTime;
-                 } else {
-                 return;
-                 }*/
-                // Amount to add to current point
-   /*             CGPoint toAdd = [boardScroller getOffsetForDirection:direction];
-                CGPoint newPoint = CGPointMake(toAdd.x + bpt.x, toAdd.y + bpt.y);
-                // Scroll to new point
-                CGRect brect = CGRectMake(newPoint.x - boardScroller.frame.size.width*.5,
-                                          newPoint.y - boardScroller.frame.size.height*.5,
-                                          boardScroller.frame.size.width, boardScroller.frame.size.height);
-                [boardScroller zoomToRect:brect animated:YES];
-            }
-        }
-    }*/
+     CGPoint pt = [self.view convertPoint:draggedTile.center fromView:draggedTile.superview];
+     if (CGRectContainsPoint(boardScroller.frame, pt)) {
+     CGPoint bpt = [boardContainer convertPoint:draggedTile.center fromView:draggedTile.superview];
+     if (boardScroller.zoomScale == 1.0f) {
+     CardinalDirections direction = [boardScroller getDirectionForEdgeWithPoint:bpt];
+     if (direction != D_NONE) {*/
+    // Wait in hover zone for 1s before scrolling
+    // Should queue a selector and cancel if user moves outside of this zone
+    /*static NSTimeInterval hover = 0;
+     static CGFloat delay = 0.5f;
+     NSTimeInterval currTime = [[NSDate date] timeIntervalSince1970];
+     if (hover == 0.0f) {
+     hover = currTime;
+     return;
+     }
+     if (currTime - hover > delay) {
+     hover = currTime;
+     } else {
+     return;
+     }*/
+    // Amount to add to current point
+    /*             CGPoint toAdd = [boardScroller getOffsetForDirection:direction];
+     CGPoint newPoint = CGPointMake(toAdd.x + bpt.x, toAdd.y + bpt.y);
+     // Scroll to new point
+     CGRect brect = CGRectMake(newPoint.x - boardScroller.frame.size.width*.5,
+     newPoint.y - boardScroller.frame.size.height*.5,
+     boardScroller.frame.size.width, boardScroller.frame.size.height);
+     [boardScroller zoomToRect:brect animated:YES];
+     }
+     }
+     }*/
 }
 
 - (void)doubleTapBoard:(UITapGestureRecognizer*)gesture

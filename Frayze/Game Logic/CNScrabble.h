@@ -16,6 +16,7 @@
 - (void)highlightTiles:(NSArray*)tiles;
 
 - (void)boardReset;
+- (void)tilesReset;
 
 - (void)drewTile:(CNScrabbleTile*)tile;
 - (void)drewTiles;
@@ -36,16 +37,19 @@
 + (NSDictionary*)letterValues;
 
 - (id)initWithDelegate:(id<CNScrabbleDelegate>)_delegate;
-- (NSUInteger)boardSize;
 
+// Board / Tiles
 - (CNScrabbleTile*)getTileAtX:(NSInteger)x y:(NSInteger)y;
 - (CGRect)rectForTiles:(NSArray*)tiles;
 - (BOOL)isEmptyAtPoint:(CGPoint)point;
+- (void)drawTiles;
+- (void)resetGame;
+- (NSUInteger)boardSize;
+- (NSUInteger)tilesInRack;
+
+// Score
 - (BOOL)canSubmit;
 - (void)submit;
 - (NSInteger)calculateScore:(BOOL)auditing;
-- (void)drawTiles;
-- (void)resetGame;
-- (NSUInteger)tilesInRack;
 
 @end

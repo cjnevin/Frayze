@@ -28,16 +28,42 @@
 @synthesize playedTiles;
 @synthesize draggedTile;
 
+/*
+ 4 blank tiles (scoring 0 points)
+ 1 point: E ×24, A ×16, O ×15, T ×15, I ×13, N ×13, R ×13, S ×10, L ×7, U ×7
+ 2 points: D ×8, G ×5
+ 3 points: C ×6, M ×6, B ×4, P ×4
+ 4 points: H ×5, F ×4, W ×4, Y ×4, V ×3
+ 5 points: K ×2
+ 8 points: J ×2, X ×2
+ 10 points: Q ×2, Z ×2
+ */
+
 + (NSDictionary*)letterDistribution
 {
+    static NSInteger oldDistribution = -1;
+    NSInteger newDistribution = [[SettingsDataSource sharedInstance] countIndex];
+    if (oldDistribution == -1) oldDistribution = newDistribution;
     static NSDictionary *values = nil;
-    if (!values) {
-        values = @{@"A":@9, @"B":@2, @"C":@2, @"D":@4, @"E":@12,
-                   @"F":@2, @"G":@3, @"H":@2, @"I":@9, @"J":@1,
-                   @"K":@1, @"L":@4, @"M":@2, @"N":@6, @"O":@8,
-                   @"P":@2, @"Q":@1, @"R":@6, @"S":@4, @"T":@6,
-                   @"U":@4, @"V":@2, @"W":@2, @"X":@1, @"Y":@2,
-                   @"Z":@1, @"?":@2};
+    if (!values || oldDistribution != newDistribution) {
+        if (newDistribution == 1) {
+            // Super, 200 tiles
+            values = @{@"A":@16, @"B":@4, @"C":@6, @"D":@8, @"E":@24,
+                       @"F":@4, @"G":@5, @"H":@5, @"I":@13, @"J":@2,
+                       @"K":@2, @"L":@7, @"M":@6, @"N":@13, @"O":@15,
+                       @"P":@4, @"Q":@2, @"R":@13, @"S":@10, @"T":@15,
+                       @"U":@7, @"V":@3, @"W":@4, @"X":@2, @"Y":@4,
+                       @"Z":@2, @"?":@4};
+        } else {
+            // Classic, 100 tiles
+            values = @{@"A":@9, @"B":@2, @"C":@2, @"D":@4, @"E":@12,
+                       @"F":@2, @"G":@3, @"H":@2, @"I":@9, @"J":@1,
+                       @"K":@1, @"L":@4, @"M":@2, @"N":@6, @"O":@8,
+                       @"P":@2, @"Q":@1, @"R":@6, @"S":@4, @"T":@6,
+                       @"U":@4, @"V":@2, @"W":@2, @"X":@1, @"Y":@2,
+                       @"Z":@1, @"?":@2};
+        }
+        oldDistribution = newDistribution;
     }
     return values;
 }
@@ -77,8 +103,9 @@
 
 - (NSUInteger)boardSize
 {
-    if ([[SettingsDataSource sharedInstance] sizeIndex] == 1) {
-        return 25;
+    NSInteger size = [[SettingsDataSource sharedInstance] gameTypeIndex];
+    if (size == 1) {
+        return 15;
     } else {
         return 15;
     }
@@ -94,8 +121,42 @@
     }
 }
 
+- (void)resetCheckeredBoard
+{
+    droppedTiles = [NSMutableSet set];
+    board = [NSMutableArray array];
+    NSUInteger dim = [self boardSize];
+    for (NSInteger y = 1; y <= dim; y++) {
+        NSMutableArray *row = [NSMutableArray arrayWithCapacity:dim];
+        for (NSInteger x = 1; x <= dim; x++) {
+            SquareType sqType = SQ_NORMAL;
+            if ((y == 2 && x == 2) || (y == 14 && x == 2) || (x == 14 && y == 2) || (x == 14 && y == 14)) {
+                sqType = SQ_TRIPLE_WORD;
+            }
+            else if (y % 2 == 0 && x % 2 == 0) {
+                sqType = SQ_DOUBLE_LETTER;
+                if (y == 8 && x == 8) {
+                    sqType = SQ_CENTER;
+                } else if ((y == 6 && x == 6) || (y == 10 && x == 6) || (x == 10 && y == 6) || (x == 10 && y == 10)) {
+                    sqType = SQ_TRIPLE_LETTER;
+                } else if (y % 4 == 0 && x % 4 == 0) {
+                    sqType = SQ_DOUBLE_WORD;
+                }
+            }
+            [row addObject:[NSNumber numberWithInteger:sqType]];
+        }
+        [board addObject:row];
+    }
+    NSLog(@"Total Squares: %d", dim * dim);
+    [delegate boardReset];
+}
+
 - (void)resetBoard
 {
+    if ([[SettingsDataSource sharedInstance] gameTypeIndex] == 1) {
+        [self resetCheckeredBoard];
+        return;
+    }
     droppedTiles = [NSMutableSet set];
     board = [NSMutableArray array];
     NSUInteger dim = [self boardSize];
@@ -227,6 +288,14 @@
         }
     }
     NSLog(@"Total Tiles: %d", bagTiles.count);
+    [drawnTiles makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [playedTiles makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [droppedTiles makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [drawnTiles removeAllObjects];
+    [playedTiles removeAllObjects];
+    [droppedTiles removeAllObjects];
+    [words removeAllObjects];
+    [delegate tilesReset];
 }
 
 - (NSUInteger)tilesInRack
@@ -270,8 +339,8 @@
         NSInteger letterMultiplier = 1;
         if ([dropped containsObject:tile]) {
             letterMultiplier = [self letterMultiplierForSquare:tile.coord];
+            wordMultiplier *= [self wordMultiplierForSquare:tile.coord];
         }
-        wordMultiplier *= [self wordMultiplierForSquare:tile.coord];
         wordValue += (letterMultiplier * tile.letterValue);
     }
     wordValue *= wordMultiplier;
@@ -400,7 +469,7 @@
 {
     NSInteger multiplier = 1;
     NSInteger x = coord.x, y = coord.y;
-    SquareType type = [board[y][x] integerValue];
+    SquareType type = [board[y-1][x-1] integerValue];
     if (type == SQ_TRIPLE_LETTER) {
         multiplier = 3;
     } else if (type == SQ_DOUBLE_LETTER) {
@@ -413,7 +482,7 @@
 {
     NSInteger multiplier = 1;
     NSInteger x = coord.x, y = coord.y;
-    SquareType type = [board[y][x] integerValue];
+    SquareType type = [board[y-1][x-1] integerValue];
     if (type == SQ_TRIPLE_WORD) {
         multiplier = 3;
     } else if (type == SQ_DOUBLE_WORD || type == SQ_CENTER) {
@@ -472,38 +541,48 @@
         NSArray *adjArray = [adjacent allObjects];
         if (vertical) {
             NSArray *word = [self getTilesAtX:tile.coord.x inArray:adjArray];
-            if (!auditing) {
-                NSLog(@"WordX = %@", [self getWord:word]);
-                [self.delegate highlightTiles:word];
+            NSUInteger wordScore = 0;
+            if (word.count > 1) {
+                wordScore = [self wordValueForTiles:word dropped:tiles];
+                if (!auditing) {
+                    NSLog(@"WordX = %@, %d", [self getWord:word], wordScore);
+                    [self.delegate highlightTiles:word];
+                }
+                score += wordScore;
             }
-            score += [self wordValueForTiles:word dropped:tiles];
             // Calculate horizontal words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
                 word = [self getTilesAtY:dTile.coord.y inArray:adjArray];
                 if (word.count > 1) {
+                    wordScore = [self wordValueForTiles:word dropped:tiles];
                     if (!auditing) {
-                        NSLog(@"WordY = %@", [self getWord:word]);
+                        NSLog(@"WordY = %@, %d", [self getWord:word], wordScore);
                         [self.delegate highlightTiles:word];
                     }
-                    score += [self wordValueForTiles:word dropped:tiles];
+                    score += wordScore;
                 }
             }
         } else {
             NSArray *word = [self getTilesAtY:tile.coord.y inArray:adjArray];
-            if (!auditing) {
-                NSLog(@"WordY = %@", [self getWord:word]);
-                [self.delegate highlightTiles:word];
+            NSUInteger wordScore = 0;
+            if (word.count > 1) {
+                wordScore = [self wordValueForTiles:word dropped:tiles];
+                if (!auditing) {
+                    NSLog(@"WordY = %@, %d", [self getWord:word], wordScore);
+                    [self.delegate highlightTiles:word];
+                }
+                score += wordScore;
             }
-            score += [self wordValueForTiles:word dropped:tiles];
             // Calculate vertical words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
                 word = [self getTilesAtX:dTile.coord.x inArray:adjArray];
                 if (word.count > 1) {
+                    wordScore = [self wordValueForTiles:word dropped:tiles];
                     if (!auditing) {
-                        NSLog(@"WordX = %@", [self getWord:word]);
+                        NSLog(@"WordX = %@, %d", [self getWord:word], wordScore);
                         [self.delegate highlightTiles:word];
                     }
-                    score += [self wordValueForTiles:word dropped:tiles];
+                    score += wordScore;
                 }
             }
         }

@@ -14,6 +14,8 @@
 @interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate>
 {
     SettingsDataSource *settingsDataSource;
+    UIImage *lattice;
+    UIImageView *latticeImage;
     IBOutlet UIView *tileRack, *settingsView;
     IBOutlet UITableView *settingsTable;
     IBOutlet UIScrollView *boardScroller;

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #define THEME_CHANGED @"THEME_CHANGED"
+#define SIZE_CHANGED @"SIZE_CHANGED"
+#define COUNT_CHANGED @"COUNT_CHANGED"
 
 @interface SettingsDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
 {
@@ -18,6 +20,7 @@
 + (SettingsDataSource*)sharedInstance;
 
 @property (atomic) NSUInteger themeIndex;
-@property (atomic) NSUInteger sizeIndex;
+@property (atomic) NSUInteger countIndex;
+@property (atomic) NSUInteger gameTypeIndex;
 
 @end

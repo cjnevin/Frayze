@@ -14,7 +14,7 @@
 {
     [typeLabel setText:[self textForSquareType]];
     [typeLabel setBackgroundColor:[self colorForSquareType]];
-    [self.layer setBorderColor:[UIColor squareBorderColor].CGColor];
+    //[self.layer setBorderColor:[UIColor squareBorderColor].CGColor];
 }
 
 - (id)initWithFrame:(CGRect)frame type:(SquareType)_type coord:(CGPoint)_coord
@@ -30,7 +30,7 @@
         [typeLabel setFont:[UIFont systemFontOfSize:14]];
         [typeLabel setMinimumScaleFactor:0.25f];
         [typeLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.layer setBorderWidth:1.0f];
+        //[self.layer setBorderWidth:1.0f];
         [self addSubview:typeLabel];
         [self applyTheme];
     }

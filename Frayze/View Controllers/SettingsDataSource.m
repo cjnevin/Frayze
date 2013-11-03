@@ -20,11 +20,15 @@ static const NSString *kThemeShift1 = @"Shift 1";
 static const NSString *kThemeShift2 = @"Shift 2";
 static const NSString *kThemeShift3 = @"Shift 3";
 
-static const NSString *kSize = @"Board Size";
-static const NSString *kSizeDefault = @"Default 15x15";
-static const NSString *kSizeLarge = @"Large 25x25";
+static const NSString *kGameType = @"Game Type";
+static const NSString *kGameTypeDefault = @"Default";
+static const NSString *kGameTypeFrayze = @"Checkered";
 
-@synthesize themeIndex, sizeIndex;
+static const NSString *kCount = @"Tile Count";
+static const NSString *kCountDefault = @"Default (100)";
+static const NSString *kCountDouble = @"Double (200)";
+
+@synthesize themeIndex, gameTypeIndex, countIndex;
 
 + (SettingsDataSource *)sharedInstance
 {
@@ -41,13 +45,16 @@ static const NSString *kSizeLarge = @"Large 25x25";
     self = [super init];
     if (self) {
         themeIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:(NSString*)kTheme] unsignedIntegerValue];
-        sizeIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:(NSString*)kSize] unsignedIntegerValue];
+        gameTypeIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:(NSString*)kGameType] unsignedIntegerValue];
+        countIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:(NSString*)kCount] unsignedIntegerValue];
         
         sections = [NSMutableArray array];
         [sections addObject:@{kSectionTitle: kTheme,
                               kSectionItems: @[kThemeDefault, kThemeDark, kThemeShift1, kThemeShift2, kThemeShift3]}];
-        [sections addObject:@{kSectionTitle: kSize,
-                              kSectionItems: @[kSizeDefault, kSizeLarge]}];
+        [sections addObject:@{kSectionTitle: kGameType,
+                              kSectionItems: @[kGameTypeDefault, kGameTypeFrayze]}];
+        [sections addObject:@{kSectionTitle: kCount,
+                              kSectionItems: @[kCountDefault, kCountDouble]}];
     }
     return self;
 }
@@ -74,8 +81,10 @@ static const NSString *kSizeLarge = @"Large 25x25";
     NSString *section = sections[indexPath.section][kSectionTitle];
     if ([section isEqualToString:(NSString*)kTheme]) {
         cell.accessoryType = themeIndex == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    } else if ([section isEqualToString:(NSString*)kSize]) {
-        cell.accessoryType = sizeIndex == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else if ([section isEqualToString:(NSString*)kGameType]) {
+        cell.accessoryType = gameTypeIndex == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else if ([section isEqualToString:(NSString*)kCount]) {
+        cell.accessoryType = countIndex == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     return cell;
 }
@@ -91,9 +100,14 @@ static const NSString *kSizeLarge = @"Large 25x25";
         [[NSUserDefaults standardUserDefaults] synchronize];
         [[NSNotificationCenter defaultCenter] postNotificationName:THEME_CHANGED object:nil];
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    } else if ([section isEqualToString:(NSString*)kSize]) {
-        sizeIndex = indexPath.row;
-        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInteger:sizeIndex] forKey:(NSString*)kSize];
+    } else if ([section isEqualToString:(NSString*)kGameType]) {
+        gameTypeIndex = indexPath.row;
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInteger:gameTypeIndex] forKey:(NSString*)kGameType];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+    } else if ([section isEqualToString:(NSString*)kCount]) {
+        countIndex = indexPath.row;
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedInteger:countIndex] forKey:(NSString*)kCount];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     }
