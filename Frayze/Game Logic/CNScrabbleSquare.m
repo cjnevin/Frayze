@@ -10,11 +10,13 @@
 
 @implementation CNScrabbleSquare
 
+@synthesize squareType;
+@synthesize coord;
+
 - (void)applyTheme
 {
     [typeLabel setText:[self textForSquareType]];
     [typeLabel setBackgroundColor:[self colorForSquareType]];
-    //[self.layer setBorderColor:[UIColor squareBorderColor].CGColor];
 }
 
 - (id)initWithFrame:(CGRect)frame type:(SquareType)_type coord:(CGPoint)_coord
@@ -22,7 +24,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        type = _type;
+        squareType = _type;
         coord = _coord;
         typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         [typeLabel setText:[self textForSquareType]];
@@ -30,7 +32,6 @@
         [typeLabel setFont:[UIFont systemFontOfSize:14]];
         [typeLabel setMinimumScaleFactor:0.25f];
         [typeLabel setTextAlignment:NSTextAlignmentCenter];
-        //[self.layer setBorderWidth:1.0f];
         [self addSubview:typeLabel];
         [self applyTheme];
     }
@@ -78,22 +79,12 @@
 
 - (UIColor*)colorForSquareType
 {
-    return [[self class] colorForSquareType:type];
+    return [[self class] colorForSquareType:squareType];
 }
 
 - (NSString*)textForSquareType
 {
-    return [[self class] textForSquareType:type];
-}
-
-- (CGPoint)coord
-{
-    return coord;
-}
-
-- (SquareType)squareType
-{
-    return type;
+    return [[self class] textForSquareType:squareType];
 }
 
 /*

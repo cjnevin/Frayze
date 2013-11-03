@@ -8,10 +8,7 @@
 
 #import "CNScrabble.h"
 #import "CNScrabbleTile.h"
-#import "NSArray+NumberComparison.h"
 #import <objc/message.h>
-
-#define DOUBLE_UP false
 
 @interface CNScrabble()
 

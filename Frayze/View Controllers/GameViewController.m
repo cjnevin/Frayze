@@ -8,7 +8,6 @@
 
 #import "GameViewController.h"
 #import "UIScrollView+Directions.h"
-#import "NSArray+NumberComparison.h"
 #import <AudioToolbox/AudioServices.h>
 
 @interface GameViewController ()

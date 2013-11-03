@@ -20,15 +20,14 @@ typedef enum {
 @interface CNScrabbleSquare : UIView
 {
     UILabel *typeLabel;
-    SquareType type;
-    CGPoint coord;
 }
+
+@property (nonatomic, assign) CGPoint coord;
+@property (nonatomic, assign) SquareType squareType;
 
 - (id)initWithFrame:(CGRect)frame type:(SquareType)type coord:(CGPoint)coord;
 
 - (void)applyTheme;
-- (CGPoint)coord;
-- (SquareType)squareType;
 - (NSString*)textForSquareType;
 
 @end

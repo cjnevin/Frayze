@@ -14,8 +14,9 @@
 @property (nonatomic, strong) UILabel *pointLabel;
 @property (nonatomic, assign) CGPoint coord;
 
-- (void)applyTheme;
 - (id)initWithFrame:(CGRect)frame letter:(NSString*)letter;
+
+- (void)applyTheme;
 - (NSInteger)letterValue;
 - (NSNumber*)getX;
 - (NSNumber*)getY;

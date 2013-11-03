@@ -21,7 +21,6 @@
 		9FF00D741822F0F90029D12E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D5C1822F0F80029D12E /* UIKit.framework */; };
 		9FF00D7C1822F0F90029D12E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9FF00D7A1822F0F90029D12E /* InfoPlist.strings */; };
 		9FF00D7E1822F0F90029D12E /* FrayzeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D7D1822F0F90029D12E /* FrayzeTests.m */; };
-		9FF00D8F1822F14B0029D12E /* NSArray+NumberComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */; };
 		9FF00D901822F14B0029D12E /* UIColor+Scrabble.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */; };
 		9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8E1822F14B0029D12E /* UIScrollView+Directions.m */; };
 		9FF00D991822F1510029D12E /* CNScrabble.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D941822F1510029D12E /* CNScrabble.m */; };
@@ -61,8 +60,6 @@
 		9FF00D791822F0F90029D12E /* FrayzeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FrayzeTests-Info.plist"; sourceTree = "<group>"; };
 		9FF00D7B1822F0F90029D12E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9FF00D7D1822F0F90029D12E /* FrayzeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrayzeTests.m; sourceTree = "<group>"; };
-		9FF00D891822F14B0029D12E /* NSArray+NumberComparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+NumberComparison.h"; sourceTree = "<group>"; };
-		9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+NumberComparison.m"; sourceTree = "<group>"; };
 		9FF00D8B1822F14B0029D12E /* UIColor+Scrabble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Scrabble.h"; sourceTree = "<group>"; };
 		9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Scrabble.m"; sourceTree = "<group>"; };
 		9FF00D8D1822F14B0029D12E /* UIScrollView+Directions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Directions.h"; sourceTree = "<group>"; };
@@ -188,8 +185,6 @@
 		9FF00D881822F14B0029D12E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				9FF00D891822F14B0029D12E /* NSArray+NumberComparison.h */,
-				9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */,
 				9FF00D8B1822F14B0029D12E /* UIColor+Scrabble.h */,
 				9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */,
 				9FF00D8D1822F14B0029D12E /* UIScrollView+Directions.h */,
@@ -328,7 +323,6 @@
 				9FF00D691822F0F90029D12E /* AppDelegate.m in Sources */,
 				9FF00D9F1822F15C0029D12E /* GameViewController.m in Sources */,
 				9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */,
-				9FF00D8F1822F14B0029D12E /* NSArray+NumberComparison.m in Sources */,
 				9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */,
 				9FF00D651822F0F80029D12E /* main.m in Sources */,
 				9FF00D901822F14B0029D12E /* UIColor+Scrabble.m in Sources */,
