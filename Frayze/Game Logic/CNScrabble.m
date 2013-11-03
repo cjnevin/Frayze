@@ -540,47 +540,47 @@
         // Calculate score for word
         NSArray *adjArray = [adjacent allObjects];
         if (vertical) {
-            NSArray *word = [self getTilesAtX:tile.coord.x inArray:adjArray];
+            NSArray *wordTiles = [self getTilesAtX:tile.coord.x inArray:adjArray];
             NSUInteger wordScore = 0;
-            if (word.count > 1) {
-                wordScore = [self wordValueForTiles:word dropped:tiles];
+            if (wordTiles.count > 1) {
+                wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
                 if (!auditing) {
-                    NSLog(@"WordX = %@, %d", [self getWord:word], wordScore);
-                    [self.delegate highlightTiles:word];
+                    NSLog(@"WordX = %@, %d", [self getWord:wordTiles], wordScore);
+                    [self.delegate highlightTiles:wordTiles];
                 }
                 score += wordScore;
             }
             // Calculate horizontal words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
-                word = [self getTilesAtY:dTile.coord.y inArray:adjArray];
-                if (word.count > 1) {
-                    wordScore = [self wordValueForTiles:word dropped:tiles];
+                wordTiles = [self getTilesAtY:dTile.coord.y inArray:adjArray];
+                if (wordTiles.count > 1) {
+                    wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
                     if (!auditing) {
-                        NSLog(@"WordY = %@, %d", [self getWord:word], wordScore);
-                        [self.delegate highlightTiles:word];
+                        NSLog(@"WordY = %@, %d", [self getWord:wordTiles], wordScore);
+                        [self.delegate highlightTiles:wordTiles];
                     }
                     score += wordScore;
                 }
             }
         } else {
-            NSArray *word = [self getTilesAtY:tile.coord.y inArray:adjArray];
+            NSArray *wordTiles = [self getTilesAtY:tile.coord.y inArray:adjArray];
             NSUInteger wordScore = 0;
-            if (word.count > 1) {
-                wordScore = [self wordValueForTiles:word dropped:tiles];
+            if (wordTiles.count > 1) {
+                wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
                 if (!auditing) {
-                    NSLog(@"WordY = %@, %d", [self getWord:word], wordScore);
-                    [self.delegate highlightTiles:word];
+                    NSLog(@"WordY = %@, %d", [self getWord:wordTiles], wordScore);
+                    [self.delegate highlightTiles:wordTiles];
                 }
                 score += wordScore;
             }
             // Calculate vertical words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
-                word = [self getTilesAtX:dTile.coord.x inArray:adjArray];
-                if (word.count > 1) {
-                    wordScore = [self wordValueForTiles:word dropped:tiles];
+                wordTiles = [self getTilesAtX:dTile.coord.x inArray:adjArray];
+                if (wordTiles.count > 1) {
+                    wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
                     if (!auditing) {
-                        NSLog(@"WordX = %@, %d", [self getWord:word], wordScore);
-                        [self.delegate highlightTiles:word];
+                        NSLog(@"WordX = %@, %d", [self getWord:wordTiles], wordScore);
+                        [self.delegate highlightTiles:wordTiles];
                     }
                     score += wordScore;
                 }
