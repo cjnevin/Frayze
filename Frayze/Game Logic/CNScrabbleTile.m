@@ -15,6 +15,14 @@
 @synthesize letterLabel;
 @synthesize coord;
 
+- (void)applyTheme
+{
+    [letterLabel setTextColor:[UIColor tileTextColor]];
+    [letterLabel setBackgroundColor:[UIColor tileColor]];
+    [self.layer setBorderColor:[UIColor tileBorderColor].CGColor];
+    [pointLabel setTextColor:[UIColor tileTextColor]];
+}
+
 - (id)initWithFrame:(CGRect)frame letter:(NSString*)letter
 {
     self = [super initWithFrame:frame];
@@ -22,16 +30,13 @@
         // Initialization code
         CGRect subFrame = CGRectMake(0, 0, frame.size.width, frame.size.height);
         letterLabel = [[UILabel alloc] initWithFrame:subFrame];
-        [letterLabel setText:[letter uppercaseString]];
-        [letterLabel setTextColor:[UIColor tileTextColor]];
-        [letterLabel setFont:[UIFont boldSystemFontOfSize:20]];
+        [letterLabel setText:letter];
+        [letterLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:28.f]];
         [letterLabel setMinimumScaleFactor:0.5f];
         [letterLabel setAdjustsFontSizeToFitWidth:YES];
         [letterLabel setTextAlignment:NSTextAlignmentCenter];
-        [letterLabel setBackgroundColor:[UIColor tileColor]];
         [letterLabel setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [self.layer setBorderWidth:1.0f];
-        [self.layer setBorderColor:[UIColor tileBorderColor].CGColor];
         [self addSubview:letterLabel];
         
         NSInteger value = [self letterValue];
@@ -39,14 +44,14 @@
             subFrame = CGRectMake(frame.size.width - 15, frame.size.height - 12, 10, 10);
             pointLabel = [[UILabel alloc] initWithFrame:subFrame];
             [pointLabel setText:[NSString stringWithFormat:@"%d", value]];
-            [pointLabel setTextColor:[UIColor tileTextColor]];
-            [pointLabel setFont:[UIFont systemFontOfSize:8.f]];
+            [pointLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10.f]];
             [pointLabel setMinimumScaleFactor:0.05f];
             [pointLabel setAdjustsFontSizeToFitWidth:YES];
             [pointLabel setTextAlignment:NSTextAlignmentRight];
             [pointLabel setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [self addSubview:pointLabel];
         }
+        [self applyTheme];
     }
     return self;
 }
@@ -54,7 +59,7 @@
 - (NSInteger)letterValue
 {
     NSDictionary *dict = [CNScrabble letterValues];
-    NSString *letter = [letterLabel.text lowercaseString];
+    NSString *letter = letterLabel.text;
     for (NSString *s in [dict allKeys]) {
         if ([s rangeOfString:letter].location != NSNotFound) {
             return [dict[s] integerValue];

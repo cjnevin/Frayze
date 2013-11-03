@@ -15,8 +15,6 @@
 {
     NSUInteger currentScore;
     UIView *boardContainer;
-    UIScrollView *boardScroller;
-    UILabel *scoreLabel;
     
     CNScrabble *scrabble;
 }
@@ -24,13 +22,37 @@
 
 @implementation GameViewController
 
+- (void)applyTheme
+{
+    tileRack.backgroundColor = [UIColor tileRackColor];
+    cpuScoreLabel.textColor = [UIColor tileTextColor];
+    cpuScoreHeadLabel.textColor = [UIColor tileTextColor];
+    scoreLabel.textColor = [UIColor tileTextColor];
+    scoreHeadLabel.textColor = [UIColor tileTextColor];
+    [boardScroller.layer setBorderColor:[UIColor squareBorderColor].CGColor];
+    [self.view setBackgroundColor:[UIColor gameBackgroundColor]];
+    for (CNScrabbleSquare *square in boardContainer.subviews) {
+        if ([square isKindOfClass:[CNScrabbleSquare class]]) {
+            [square applyTheme];
+        }
+    }
+    [tileRack.subviews makeObjectsPerformSelector:@selector(applyTheme)];
+    [scrabble.playedTiles makeObjectsPerformSelector:@selector(applyTheme)];
+    [scrabble.droppedTiles makeObjectsPerformSelector:@selector(applyTheme)];
+    for (UIView *v in boardContainer.subviews) {
+        if (v.tag == 101) {
+            [v.layer setBorderColor:[UIColor tileHighlight].CGColor];
+        }
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    CGFloat topOffset = 30 + 44, leftOffset = 10;
-    boardScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(leftOffset, topOffset, 300, 300)];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:THEME_CHANGED object:nil];
+    
     boardContainer = [[UIView alloc] init];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapBoard:)];
     [doubleTap setNumberOfTapsRequired:2];
@@ -43,12 +65,6 @@
     [boardScroller setScrollIndicatorInsets:UIEdgeInsetsZero];
     [boardScroller setContentInset:UIEdgeInsetsZero];
     [boardScroller.layer setBorderWidth:1.0f];
-    [boardScroller.layer setBorderColor:[UIColor squareBorderColor].CGColor];
-    [self.view insertSubview:boardScroller belowSubview:settingsView];
-    [self.view setBackgroundColor:[UIColor gameBackgroundColor]];
-    
-    scoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftOffset, topOffset + 300 + 10, 300, 25)];
-    [self.view addSubview:scoreLabel];
     
     UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPressed:)];
     UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(settingsPressed:)];
@@ -56,11 +72,17 @@
     [self.navigationItem setRightBarButtonItems:@[play]];
     [self.navigationItem setTitle:@"Frayze"];
     
-    tileRack.backgroundColor = [UIColor tileRackColor];
-
+    [self.view bringSubviewToFront:tileRack];
+    [self.view bringSubviewToFront:settingsView];
+    
+    settingsDataSource = [SettingsDataSource sharedInstance];
+    settingsTable.dataSource = settingsDataSource;
+    settingsTable.delegate = settingsDataSource;
+    
     // Finally setup the scrabble board
     scrabble = [[CNScrabble alloc] initWithDelegate:self];
     [scrabble resetGame];
+    [self applyTheme];
 }
 
 - (void)didReceiveMemoryWarning
@@ -73,7 +95,10 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    return boardContainer;
+    if (scrollView == boardScroller) {
+        return boardContainer;
+    }
+    return nil;
 }
 
 #pragma mark - Delegate
@@ -105,7 +130,7 @@
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTile:)];
     [pan setDelegate:self];
     [longPress setDelegate:self];
-    [longPress setMinimumPressDuration:0.25f];
+    [longPress setMinimumPressDuration:0.1f];
     [tile setGestureRecognizers:@[pan, longPress]];
 }
 
@@ -121,7 +146,7 @@
     for (NSInteger i = 0; i < count; i++) {
         CNScrabbleTile *tile = [scrabble drawnTiles][i];
         CGFloat x = round(xoffset + i * (tileWidth + xpadding));
-        tile.frame = CGRectMake(x, 10, tileWidth, tileWidth);
+        tile.frame = CGRectMake(x, 5, tileWidth, tileWidth);
         [tileRack addSubview:tile];
     }
 }
@@ -149,6 +174,11 @@
 
 #pragma mark - Gestures
 
+- (void)themeChanged:(NSNotification*)notification
+{
+    [self applyTheme];
+}
+
 - (void)playPressed:(id)sender
 {
     if (![scrabble canSubmit]) {
@@ -163,11 +193,12 @@
 
 - (void)settingsPressed:(id)sender
 {
+    CGFloat alpha = 1.0f;
     [UIView animateWithDuration:0.5f animations:^{
-        if (settingsView.alpha == 0.8f) {
+        if (settingsView.alpha == alpha) {
             settingsView.alpha = 0.0f;
         } else {
-            settingsView.alpha = 0.8f;
+            settingsView.alpha = alpha;
         }
     }];
 }
@@ -271,33 +302,37 @@
         case UIGestureRecognizerStateEnded: {
             // TODO: Vibrate on drop on board/rack - setting
             // TODO: Restore to tile rack if user drags out of confines of board
+            // TODO: Check that location is within visible area if zoomed in
             [boardScroller setUserInteractionEnabled:YES];
             
             CGPoint pt = [self.view convertPoint:t.center fromView:t.superview];
-            CGPoint bpt = [gesture locationInView:boardContainer];
-            //CGPoint bpt = [boardContainer convertPoint:[gesture locationInView:t] fromView:t.superview];
+            CGPoint bpt = [gesture locationInView:boardContainer];  //[boardContainer convertPoint:t.center fromView:t.superview];
+            CGRect visibleRect = [boardScroller convertRect:boardScroller.bounds toView:boardContainer];
             BOOL filled = NO;
-            if (CGRectContainsPoint(boardScroller.frame, pt)) {
+            BOOL inbounds = CGRectContainsPoint(visibleRect, bpt);
+            if (CGRectContainsPoint(boardScroller.frame, pt) && inbounds) {
                 filled = ![scrabble isEmptyAtPoint:bpt];
             }
             if (!filled) {
                 // Square is empty, add dragged tile
                 filled = YES;
-                for (CNScrabbleSquare *square in boardContainer.subviews) {
-                    if ([square isKindOfClass:[CNScrabbleSquare class]]) {
-                        if (CGRectContainsPoint(square.frame, bpt)) {
-                            if ([scrabble getTileAtX:square.coord.x y:square.coord.y]) {
+                if (inbounds) {
+                    for (CNScrabbleSquare *square in boardContainer.subviews) {
+                        if ([square isKindOfClass:[CNScrabbleSquare class]]) {
+                            if (CGRectContainsPoint(square.frame, bpt)) {
+                                if ([scrabble getTileAtX:square.coord.x y:square.coord.y]) {
+                                    break;
+                                }
+                                [t setFrame:square.frame];
+                                [t setCoord:square.coord];
+                                [boardContainer addSubview:t];
+                                [[scrabble drawnTiles] removeObject:t];
+                                [[scrabble droppedTiles] addObject:t];
+                                // Vibrate on drop?
+                                //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                                filled = NO;
                                 break;
                             }
-                            [t setFrame:square.frame];
-                            [t setCoord:square.coord];
-                            [boardContainer addSubview:t];
-                            [[scrabble drawnTiles] removeObject:t];
-                            [[scrabble droppedTiles] addObject:t];
-                            // Vibrate on drop
-                            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-                            filled = NO;
-                            break;
                         }
                     }
                 }
@@ -343,26 +378,5 @@
     return NO;
 }
 
-#pragma mark - Table View
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
 
 @end

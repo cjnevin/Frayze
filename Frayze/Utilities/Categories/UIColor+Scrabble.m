@@ -8,25 +8,36 @@
 
 #import "UIColor+Scrabble.h"
 
-//#define INVERSE true
-
 // Adjust hues using same logic as INVERSE, allow user to define the amount to offset from the original
 
 @implementation UIColor (Scrabble)
 
+NSUInteger theme() {
+    NSUInteger index = [[SettingsDataSource sharedInstance] themeIndex];
+    return index;
+}
+
 UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
-#ifdef INVERSE
-    NSInteger amount = 255;
-    return [UIColor colorWithRed:abs(amount-r)/255.f green:abs(amount-g)/255.f blue:abs(amount-b)/255.f alpha:1.0f];
-#endif
-    return [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:1.0f];
+    if (theme() == 1) {
+        CGFloat amount = 400.f;
+        return [UIColor colorWithRed:abs(amount-r)/amount green:abs(amount-g)/amount blue:abs(amount-b)/amount alpha:1.0f];
+    } else if (theme() == 2) {
+        return [UIColor colorWithRed:b/255.f green:g/255.f blue:r/255.f alpha:1.0f];    // BGR
+    } else if (theme() == 3) {
+        return [UIColor colorWithRed:g/255.f green:r/255.f blue:b/255.f alpha:1.0f];    // GRB
+    } else if (theme() == 4) {
+        return [UIColor colorWithRed:g/255.f green:b/255.f blue:r/255.f alpha:1.0f];    // GBR
+    } else {
+        return [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:1.0f];    // RGB
+    }
 }
 
 #pragma mark - Game
 
 + (UIColor *)gameBackgroundColor
 {
-    return rgb(255, 255, 255);
+    //return [self tileRackColor];
+    return rgb(255,255,255);
 }
 
 #pragma mark - Board

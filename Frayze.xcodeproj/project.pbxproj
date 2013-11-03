@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9FE4087A1825B52A000972DD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE408791825B52A000972DD /* AudioToolbox.framework */; };
+		9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4087C1825BE7F000972DD /* SettingsDataSource.m */; };
 		9FF00D591822F0F80029D12E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D581822F0F80029D12E /* Foundation.framework */; };
 		9FF00D5B1822F0F80029D12E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D5A1822F0F80029D12E /* CoreGraphics.framework */; };
 		9FF00D5D1822F0F80029D12E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D5C1822F0F80029D12E /* UIKit.framework */; };
@@ -19,6 +21,14 @@
 		9FF00D741822F0F90029D12E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D5C1822F0F80029D12E /* UIKit.framework */; };
 		9FF00D7C1822F0F90029D12E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9FF00D7A1822F0F90029D12E /* InfoPlist.strings */; };
 		9FF00D7E1822F0F90029D12E /* FrayzeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D7D1822F0F90029D12E /* FrayzeTests.m */; };
+		9FF00D8F1822F14B0029D12E /* NSArray+NumberComparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */; };
+		9FF00D901822F14B0029D12E /* UIColor+Scrabble.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */; };
+		9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D8E1822F14B0029D12E /* UIScrollView+Directions.m */; };
+		9FF00D991822F1510029D12E /* CNScrabble.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D941822F1510029D12E /* CNScrabble.m */; };
+		9FF00D9A1822F1510029D12E /* CNScrabbleSquare.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D961822F1510029D12E /* CNScrabbleSquare.m */; };
+		9FF00D9B1822F1510029D12E /* CNScrabbleTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D981822F1510029D12E /* CNScrabbleTile.m */; };
+		9FF00D9F1822F15C0029D12E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF00D9E1822F15C0029D12E /* GameViewController.m */; };
+		9FF00DA11822F1A70029D12E /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FF00DA01822F1A70029D12E /* Main_iPhone.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9FE408791825B52A000972DD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9FE4087B1825BE7F000972DD /* SettingsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDataSource.h; sourceTree = "<group>"; };
+		9FE4087C1825BE7F000972DD /* SettingsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDataSource.m; sourceTree = "<group>"; };
 		9FF00D551822F0F80029D12E /* Frayze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Frayze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FF00D581822F0F80029D12E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9FF00D5A1822F0F80029D12E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -48,6 +61,21 @@
 		9FF00D791822F0F90029D12E /* FrayzeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FrayzeTests-Info.plist"; sourceTree = "<group>"; };
 		9FF00D7B1822F0F90029D12E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9FF00D7D1822F0F90029D12E /* FrayzeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrayzeTests.m; sourceTree = "<group>"; };
+		9FF00D891822F14B0029D12E /* NSArray+NumberComparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+NumberComparison.h"; sourceTree = "<group>"; };
+		9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+NumberComparison.m"; sourceTree = "<group>"; };
+		9FF00D8B1822F14B0029D12E /* UIColor+Scrabble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Scrabble.h"; sourceTree = "<group>"; };
+		9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Scrabble.m"; sourceTree = "<group>"; };
+		9FF00D8D1822F14B0029D12E /* UIScrollView+Directions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Directions.h"; sourceTree = "<group>"; };
+		9FF00D8E1822F14B0029D12E /* UIScrollView+Directions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Directions.m"; sourceTree = "<group>"; };
+		9FF00D931822F1510029D12E /* CNScrabble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabble.h; sourceTree = "<group>"; };
+		9FF00D941822F1510029D12E /* CNScrabble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabble.m; sourceTree = "<group>"; };
+		9FF00D951822F1510029D12E /* CNScrabbleSquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabbleSquare.h; sourceTree = "<group>"; };
+		9FF00D961822F1510029D12E /* CNScrabbleSquare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabbleSquare.m; sourceTree = "<group>"; };
+		9FF00D971822F1510029D12E /* CNScrabbleTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabbleTile.h; sourceTree = "<group>"; };
+		9FF00D981822F1510029D12E /* CNScrabbleTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabbleTile.m; sourceTree = "<group>"; };
+		9FF00D9D1822F15C0029D12E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		9FF00D9E1822F15C0029D12E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		9FF00DA01822F1A70029D12E /* Main_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPhone.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FE4087A1825B52A000972DD /* AudioToolbox.framework in Frameworks */,
 				9FF00D5B1822F0F80029D12E /* CoreGraphics.framework in Frameworks */,
 				9FF00D5D1822F0F80029D12E /* UIKit.framework in Frameworks */,
 				9FF00D591822F0F80029D12E /* Foundation.framework in Frameworks */,
@@ -96,6 +125,7 @@
 		9FF00D571822F0F80029D12E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9FE408791825B52A000972DD /* AudioToolbox.framework */,
 				9FF00D581822F0F80029D12E /* Foundation.framework */,
 				9FF00D5A1822F0F80029D12E /* CoreGraphics.framework */,
 				9FF00D5C1822F0F80029D12E /* UIKit.framework */,
@@ -110,6 +140,9 @@
 				9FF00D671822F0F90029D12E /* AppDelegate.h */,
 				9FF00D681822F0F90029D12E /* AppDelegate.m */,
 				9FF00D6A1822F0F90029D12E /* Images.xcassets */,
+				9FF00D921822F1510029D12E /* Game Logic */,
+				9FF00D871822F14B0029D12E /* Utilities */,
+				9FF00D9C1822F15C0029D12E /* View Controllers */,
 				9FF00D5F1822F0F80029D12E /* Supporting Files */,
 			);
 			path = Frayze;
@@ -142,6 +175,52 @@
 				9FF00D7A1822F0F90029D12E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9FF00D871822F14B0029D12E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9FF00D881822F14B0029D12E /* Categories */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		9FF00D881822F14B0029D12E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				9FF00D891822F14B0029D12E /* NSArray+NumberComparison.h */,
+				9FF00D8A1822F14B0029D12E /* NSArray+NumberComparison.m */,
+				9FF00D8B1822F14B0029D12E /* UIColor+Scrabble.h */,
+				9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */,
+				9FF00D8D1822F14B0029D12E /* UIScrollView+Directions.h */,
+				9FF00D8E1822F14B0029D12E /* UIScrollView+Directions.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		9FF00D921822F1510029D12E /* Game Logic */ = {
+			isa = PBXGroup;
+			children = (
+				9FF00D931822F1510029D12E /* CNScrabble.h */,
+				9FF00D941822F1510029D12E /* CNScrabble.m */,
+				9FF00D951822F1510029D12E /* CNScrabbleSquare.h */,
+				9FF00D961822F1510029D12E /* CNScrabbleSquare.m */,
+				9FF00D971822F1510029D12E /* CNScrabbleTile.h */,
+				9FF00D981822F1510029D12E /* CNScrabbleTile.m */,
+			);
+			path = "Game Logic";
+			sourceTree = "<group>";
+		};
+		9FF00D9C1822F15C0029D12E /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9FF00DA01822F1A70029D12E /* Main_iPhone.storyboard */,
+				9FF00D9D1822F15C0029D12E /* GameViewController.h */,
+				9FF00D9E1822F15C0029D12E /* GameViewController.m */,
+				9FE4087B1825BE7F000972DD /* SettingsDataSource.h */,
+				9FE4087C1825BE7F000972DD /* SettingsDataSource.m */,
+			);
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,6 +270,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = CJNevin;
 				TargetAttributes = {
+					9FF00D541822F0F80029D12E = {
+						DevelopmentTeam = U92ZHC5WL6;
+					};
 					9FF00D6F1822F0F90029D12E = {
 						TestTargetID = 9FF00D541822F0F80029D12E;
 					};
@@ -221,6 +303,7 @@
 			files = (
 				9FF00D631822F0F80029D12E /* InfoPlist.strings in Resources */,
 				9FF00D6B1822F0F90029D12E /* Images.xcassets in Resources */,
+				9FF00DA11822F1A70029D12E /* Main_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,8 +322,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FF00D9B1822F1510029D12E /* CNScrabbleTile.m in Sources */,
+				9FF00D991822F1510029D12E /* CNScrabble.m in Sources */,
+				9FF00D9A1822F1510029D12E /* CNScrabbleSquare.m in Sources */,
 				9FF00D691822F0F90029D12E /* AppDelegate.m in Sources */,
+				9FF00D9F1822F15C0029D12E /* GameViewController.m in Sources */,
+				9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */,
+				9FF00D8F1822F14B0029D12E /* NSArray+NumberComparison.m in Sources */,
+				9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */,
 				9FF00D651822F0F80029D12E /* main.m in Sources */,
+				9FF00D901822F14B0029D12E /* UIColor+Scrabble.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,10 +450,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Frayze/Frayze-Prefix.pch";
 				INFOPLIST_FILE = "Frayze/Frayze-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -372,10 +466,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Frayze/Frayze-Prefix.pch";
 				INFOPLIST_FILE = "Frayze/Frayze-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -441,6 +538,7 @@
 				9FF00D831822F0F90029D12E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9FF00D841822F0F90029D12E /* Build configuration list for PBXNativeTarget "FrayzeTests" */ = {
 			isa = XCConfigurationList;
@@ -449,6 +547,7 @@
 				9FF00D861822F0F90029D12E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

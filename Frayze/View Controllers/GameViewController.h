@@ -9,11 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "CNScrabble.h"
 #import "CNScrabbleTile.h"
+#import "SettingsDataSource.h"
 
-@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate>
 {
+    SettingsDataSource *settingsDataSource;
     IBOutlet UIView *tileRack, *settingsView;
-    IBOutlet UIScrollView *settingsTable;
+    IBOutlet UITableView *settingsTable;
+    IBOutlet UIScrollView *boardScroller;
+    IBOutlet UILabel *scoreLabel;
+    IBOutlet UILabel *cpuScoreLabel;
+    IBOutlet UILabel *scoreHeadLabel;
+    IBOutlet UILabel *cpuScoreHeadLabel;
 }
 
 @end

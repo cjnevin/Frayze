@@ -26,6 +26,7 @@ typedef enum {
 
 - (id)initWithFrame:(CGRect)frame type:(SquareType)type coord:(CGPoint)coord;
 
+- (void)applyTheme;
 - (CGPoint)coord;
 - (SquareType)squareType;
 - (NSString*)textForSquareType;

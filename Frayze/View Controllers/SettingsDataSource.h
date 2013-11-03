@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SettingsDataSource : NSObject
+#define THEME_CHANGED @"THEME_CHANGED"
+
+@interface SettingsDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
+{
+    NSMutableArray *sections;
+}
+
++ (SettingsDataSource*)sharedInstance;
+
+@property (atomic) NSUInteger themeIndex;
+@property (atomic) NSUInteger sizeIndex;
 
 @end
