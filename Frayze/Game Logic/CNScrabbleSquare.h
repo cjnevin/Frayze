@@ -1,6 +1,6 @@
 //
 //  CNScrabbleSquare.h
-//  WordPlay
+//  Frayze
 //
 //  Created by CJNevin on 31/10/2013.
 //  Copyright (c) 2013 CJNevin. All rights reserved.

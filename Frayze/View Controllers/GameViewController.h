@@ -1,6 +1,6 @@
 //
 //  FirstViewController.h
-//  WordPlay
+//  Frayze
 //
 //  Created by CJNevin on 30/10/2013.
 //  Copyright (c) 2013 CJNevin. All rights reserved.

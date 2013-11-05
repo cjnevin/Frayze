@@ -1,6 +1,6 @@
 //
 //  FirstViewController.m
-//  WordPlay
+//  Frayze
 //
 //  Created by CJNevin on 30/10/2013.
 //  Copyright (c) 2013 CJNevin. All rights reserved.
@@ -402,6 +402,9 @@
                                 [boardContainer addSubview:t];
                                 [[scrabble drawnTiles] removeObject:t];
                                 [[scrabble droppedTiles] addObject:t];
+                                if ([[[t letterLabel] text] isEqualToString:@"?"]) {
+                                    // TODO: Present Selector
+                                }
                                 // Vibrate on drop?
                                 //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
                                 filled = NO;

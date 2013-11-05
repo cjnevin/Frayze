@@ -1,6 +1,6 @@
 //
 //  CNScrabble.m
-//  WordPlay
+//  Frayze
 //
 //  Created by CJNevin on 30/10/2013.
 //  Copyright (c) 2013 CJNevin. All rights reserved.
@@ -153,6 +153,8 @@
         [self resetCheckeredBoard];
         return;
     }
+    // This logic will work for any odd sized board, however the size of each square will need to scale accordingly
+    // otherwise tiles will appear on half pixels. 15x15, 25x25 work best as they are divisible by 300 (width of board).
     droppedTiles = [NSMutableSet set];
     board = [NSMutableArray array];
     NSUInteger dim = [self boardSize];
