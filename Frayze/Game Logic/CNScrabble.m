@@ -25,17 +25,6 @@
 @synthesize playedTiles;
 @synthesize draggedTile;
 
-/*
- 4 blank tiles (scoring 0 points)
- 1 point: E ×24, A ×16, O ×15, T ×15, I ×13, N ×13, R ×13, S ×10, L ×7, U ×7
- 2 points: D ×8, G ×5
- 3 points: C ×6, M ×6, B ×4, P ×4
- 4 points: H ×5, F ×4, W ×4, Y ×4, V ×3
- 5 points: K ×2
- 8 points: J ×2, X ×2
- 10 points: Q ×2, Z ×2
- */
-
 + (NSDictionary*)letterDistribution
 {
     static NSInteger oldDistribution = -1;
@@ -45,6 +34,16 @@
     if (!values || oldDistribution != newDistribution) {
         if (newDistribution == 1) {
             // Super, 200 tiles
+            /*
+             4 blank tiles (scoring 0 points)
+             1 point: E ×24, A ×16, O ×15, T ×15, I ×13, N ×13, R ×13, S ×10, L ×7, U ×7
+             2 points: D ×8, G ×5
+             3 points: C ×6, M ×6, B ×4, P ×4
+             4 points: H ×5, F ×4, W ×4, Y ×4, V ×3
+             5 points: K ×2
+             8 points: J ×2, X ×2
+             10 points: Q ×2, Z ×2
+             */
             values = @{@"A":@16, @"B":@4, @"C":@6, @"D":@8, @"E":@24,
                        @"F":@4, @"G":@5, @"H":@5, @"I":@13, @"J":@2,
                        @"K":@2, @"L":@7, @"M":@6, @"N":@13, @"O":@15,

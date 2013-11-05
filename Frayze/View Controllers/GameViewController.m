@@ -52,19 +52,19 @@
 
 - (UIImage*)createLattice
 {
-    CGRect bounds = CGRectMake(0, 0, 600, 600);
-    UIGraphicsBeginImageContext(bounds.size);
+    CGFloat side = 600.f, step = side / 15.f;
+    UIGraphicsBeginImageContext(CGSizeMake(side, side));
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1);
     [[UIColor squareBorderColor] setStroke];
-    for (NSInteger i = 0; i <= 600; i+= 40) {
+    for (NSInteger i = 0; i <= side; i+= step) {
         CGContextBeginPath(context);
         CGContextMoveToPoint(context, i, 0);
-        CGContextAddLineToPoint(context, i, 600);
+        CGContextAddLineToPoint(context, i, side);
         CGContextStrokePath(context);
         CGContextBeginPath(context);
         CGContextMoveToPoint(context, 0, i);
-        CGContextAddLineToPoint(context, 600, i);
+        CGContextAddLineToPoint(context, side, i);
         CGContextStrokePath(context);
     }
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -224,7 +224,21 @@
 
 - (void)shufflePressed:(id)sender
 {
-    
+    NSMutableArray *a = [NSMutableArray arrayWithArray:[scrabble drawnTiles]];
+    NSMutableArray *b = [NSMutableArray array];
+    CGFloat count = a.count;
+    while (b.count != count) {
+        NSInteger r = arc4random() % a.count;
+        [b addObject:a[r]];
+        [a removeObjectAtIndex:r];
+    }
+    [scrabble setDrawnTiles:b];
+    [sender setEnabled:NO];
+    [UIView animateWithDuration:0.25f animations:^{
+        [self drewTiles];
+    } completion:^(BOOL finished) {
+        [sender setEnabled:YES];
+    }];
 }
 
 - (void)playPressed:(id)sender
