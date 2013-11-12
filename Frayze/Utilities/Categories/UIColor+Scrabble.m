@@ -32,12 +32,16 @@ UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
     }
 }
 
+UIColor* white(NSUInteger w) {
+    return rgb(w, w, w);
+}
+
 #pragma mark - Game
 
 + (UIColor *)gameBackgroundColor
 {
     //return [self tileRackColor];
-    return rgb(255,255,255);
+    return white(255);
 }
 
 #pragma mark - Board
@@ -74,7 +78,7 @@ UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
 
 + (UIColor *)squareBorderColor
 {
-    return rgb(0,0,0);
+    return white(0);
 }
 
 #pragma mark - Tile
@@ -92,7 +96,17 @@ UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
 
 + (UIColor*)tileTextColor
 {
-    return rgb(0, 0, 0);
+    return white(0);
+}
+
++ (UIColor*)tileCountColor
+{
+    return white(255);
+}
+
++ (UIColor*)tileCountBackgroundColor
+{
+    return white(0);
 }
 
 + (UIColor*)tileRackColor
@@ -102,7 +116,7 @@ UIColor* rgb(NSUInteger r, NSUInteger g, NSUInteger b) {
 
 + (UIColor *)tileBorderColor
 {
-    return rgb(0, 0, 0);
+    return white(0);
 }
 
 @end

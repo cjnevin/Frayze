@@ -18,6 +18,7 @@
     UIImageView *latticeImage;
     IBOutlet UIView *tileRack, *settingsView;
     IBOutlet UITableView *settingsTable;
+    IBOutlet UIScrollView *tilesView;
     IBOutlet UIScrollView *boardScroller;
     IBOutlet UILabel *scoreLabel;
     IBOutlet UILabel *cpuScoreLabel;

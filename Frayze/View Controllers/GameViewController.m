@@ -92,15 +92,16 @@
     [boardScroller setContentInset:UIEdgeInsetsZero];
     [boardScroller.layer setBorderWidth:1.0f];
     
-    UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPressed:)];
-    UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(shufflePressed:)];
-    UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(settingsPressed:)];
-    UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(infoPressed:)];
+    UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"play"] style:UIBarButtonItemStyleBordered target:self action:@selector(playPressed:)];
+    UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"shuffle"] style:UIBarButtonItemStyleBordered target:self action:@selector(shufflePressed:)];
+    UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsPressed:)];
+    UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"visible"] style:UIBarButtonItemStyleBordered target:self action:@selector(infoPressed:)];
     
-    [self.navigationItem setLeftBarButtonItems:@[settings, shuffle]];
-    [self.navigationItem setRightBarButtonItems:@[play, info]];
-    [self.navigationItem setTitle:@"Frayze"];
-    
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+    spacer.width = 40.f;
+    [self.navigationItem setLeftBarButtonItems:@[settings, spacer, info]];
+    [self.navigationItem setRightBarButtonItems:@[play, spacer, shuffle]];
+
     [self.view bringSubviewToFront:tileRack];
     [self.view bringSubviewToFront:settingsView];
     
@@ -219,7 +220,49 @@
 
 - (void)infoPressed:(id)sender
 {
-    
+    CGFloat alpha = 1.0f;
+    if (tilesView.alpha == alpha) {
+        [self animateView:tilesView alpha:0.0f completion:nil];
+    } else {
+        [tilesView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        static NSUInteger perRow = 6;
+        NSUInteger rowCount = 0, colCount = 0;
+        for (char c = 'A'; c <= 'Z'; c++) {
+            NSString *letter = [NSString stringWithFormat:@"%c", c];
+            NSUInteger count = 0;
+            for (NSString *tile in scrabble.bagTiles) {
+                if ([tile isEqualToString:letter]) {
+                    count++;
+                }
+            }
+            if (count > 0) {
+                CNScrabbleTile *tile = [[CNScrabbleTile alloc] initWithFrame:CGRectMake(10 + (rowCount * (300 / perRow)), 10 + (50 * colCount), 40, 40) letter:letter];
+                rowCount++;
+                if (rowCount >= perRow) {
+                    rowCount = 0;
+                    colCount++;
+                }
+                tile.pointLabel.text = [NSString stringWithFormat:@"%d", count];
+                [tilesView addSubview:tile];
+                tile.pointLabel.textColor = [UIColor tileCountColor];
+                tile.pointLabel.backgroundColor = [UIColor tileCountBackgroundColor];
+                CGRect r = tile.pointLabel.frame;
+                r.origin.y = 0;
+                r.size.width = 14;
+                r.size.height = 14;
+                r.origin.x = 40 - r.size.width;
+                tile.pointLabel.layer.borderColor = [UIColor tileBorderColor].CGColor;
+                tile.pointLabel.layer.borderWidth = 1.f;
+                tile.pointLabel.frame = r;
+                tile.pointLabel.textAlignment = NSTextAlignmentCenter;
+                
+            }
+        }
+        [tilesView.superview bringSubviewToFront:tilesView];
+        [self animateView:tilesView alpha:alpha completion:^{
+            [self animateView:settingsView alpha:0.0f completion:nil];
+        }];
+    }
 }
 
 - (void)shufflePressed:(id)sender
@@ -234,7 +277,7 @@
     }
     [scrabble setDrawnTiles:b];
     [sender setEnabled:NO];
-    [UIView animateWithDuration:0.25f animations:^{
+    [UIView animateWithDuration:0.5f animations:^{
         [self drewTiles];
     } completion:^(BOOL finished) {
         [sender setEnabled:YES];
@@ -253,6 +296,19 @@
     }
 }
 
+- (void)animateView:(UIView*)view alpha:(CGFloat)alpha completion:(void(^)(void))completion
+{
+    if (view.alpha == alpha) {
+        if (completion) completion();
+    } else {
+        [UIView animateWithDuration:0.25f animations:^{
+            view.alpha = alpha;
+        } completion:^(BOOL finished) {
+            if (completion) completion();
+        }];
+    }
+}
+
 - (void)settingsPressed:(id)sender
 {
     // TODO: Prompt if user wants to commit these changes and lose their current game
@@ -261,20 +317,21 @@
     NSInteger newGameType = [[SettingsDataSource sharedInstance] gameTypeIndex];
     NSInteger newTileCount = [[SettingsDataSource sharedInstance] countIndex];
     CGFloat alpha = 1.0f;
-    [UIView animateWithDuration:0.5f animations:^{
-        if (settingsView.alpha == alpha) {
-            if (oldGameType != newGameType || oldTileCount != newTileCount) {
-                oldTileCount = newTileCount;
-                oldGameType = newGameType;
-                [scrabble resetGame];
-            }
-            settingsView.alpha = 0.0f;
-        } else {
-            oldGameType = newGameType;
+    if (settingsView.alpha == alpha) {
+        if (oldGameType != newGameType || oldTileCount != newTileCount) {
             oldTileCount = newTileCount;
-            settingsView.alpha = alpha;
+            oldGameType = newGameType;
+            [scrabble resetGame];
         }
-    }];
+        [self animateView:settingsView alpha:0.0f completion:nil];
+    } else {
+        [settingsView.superview bringSubviewToFront:settingsView];
+        oldGameType = newGameType;
+        oldTileCount = newTileCount;
+        [self animateView:settingsView alpha:alpha completion:^{
+            [self animateView:tilesView alpha:0.0f completion:nil];
+        }];
+    }
 }
 
 - (void)zoomBoardAtPoint:(CGPoint)pt

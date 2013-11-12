@@ -220,6 +220,7 @@
         if (bagTiles.count > 0) {
             NSInteger t = arc4random() % bagTiles.count;
             [drawn addObject:bagTiles[t]];
+            [bagTiles removeObjectAtIndex:t];
         }
     }
     return drawn;

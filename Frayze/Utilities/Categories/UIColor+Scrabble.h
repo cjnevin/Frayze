@@ -21,6 +21,8 @@
 + (UIColor*)tileColor;
 + (UIColor*)tileBorderColor;
 + (UIColor*)tileTextColor;
++ (UIColor*)tileCountColor;
++ (UIColor*)tileCountBackgroundColor;
 + (UIColor*)tileRackColor;
 + (UIColor*)gameBackgroundColor;
 

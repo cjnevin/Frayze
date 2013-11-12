@@ -16,34 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view alpha="0.0" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NqV-gD-8S1" userLabel="Settings View">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-9G-enb">
-                                        <rect key="frame" x="10" y="10" width="300" height="484"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="AGs-JW-CVe">
-                                                <rect key="frame" x="0.0" y="22" width="300" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AGs-JW-CVe" id="0P5-Bg-Ojf">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                </tableViewCellContentView>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="qoB-9G-enb" firstAttribute="top" secondItem="NqV-gD-8S1" secondAttribute="top" constant="10" id="E56-yf-Aqg"/>
-                                    <constraint firstItem="qoB-9G-enb" firstAttribute="leading" secondItem="NqV-gD-8S1" secondAttribute="leading" constant="10" id="GQA-Dp-Fm3"/>
-                                    <constraint firstAttribute="trailing" secondItem="qoB-9G-enb" secondAttribute="trailing" constant="10" id="iae-37-HTd"/>
-                                    <constraint firstAttribute="bottom" secondItem="qoB-9G-enb" secondAttribute="bottom" constant="10" id="oJy-8X-QVc"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYq-hl-vng">
                                 <rect key="frame" x="0.0" y="64" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -102,11 +74,45 @@
                                     <constraint firstAttribute="height" constant="50" id="b2G-hy-q0M"/>
                                 </constraints>
                             </view>
+                            <view alpha="0.0" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NqV-gD-8S1" userLabel="Settings View">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-9G-enb">
+                                        <rect key="frame" x="10" y="10" width="300" height="484"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <prototypes>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="AGs-JW-CVe">
+                                                <rect key="frame" x="0.0" y="22" width="300" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AGs-JW-CVe" id="0P5-Bg-Ojf">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="qoB-9G-enb" firstAttribute="top" secondItem="NqV-gD-8S1" secondAttribute="top" constant="10" id="E56-yf-Aqg"/>
+                                    <constraint firstItem="qoB-9G-enb" firstAttribute="leading" secondItem="NqV-gD-8S1" secondAttribute="leading" constant="10" id="GQA-Dp-Fm3"/>
+                                    <constraint firstAttribute="trailing" secondItem="qoB-9G-enb" secondAttribute="trailing" constant="10" id="iae-37-HTd"/>
+                                    <constraint firstAttribute="bottom" secondItem="qoB-9G-enb" secondAttribute="bottom" constant="10" id="oJy-8X-QVc"/>
+                                </constraints>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rtx-zU-CoX" userLabel="Tiles View">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="nYq-hl-vng" firstAttribute="top" secondItem="2VE-Yg-loa" secondAttribute="top" constant="64" id="1oF-nL-Idi"/>
                             <constraint firstAttribute="bottom" secondItem="SgO-2l-r4W" secondAttribute="bottom" id="A1L-21-5oi"/>
+                            <constraint firstItem="rtx-zU-CoX" firstAttribute="top" secondItem="2VE-Yg-loa" secondAttribute="top" constant="64" id="AtA-LE-6q7"/>
                             <constraint firstAttribute="bottom" secondItem="Uo1-6f-gda" secondAttribute="bottom" constant="60" id="EMC-iV-CSo"/>
                             <constraint firstItem="NqV-gD-8S1" firstAttribute="top" secondItem="2VE-Yg-loa" secondAttribute="top" constant="64" id="gkA-cp-EWc"/>
                             <constraint firstAttribute="bottom" secondItem="NqV-gD-8S1" secondAttribute="bottom" id="goQ-uq-PnX"/>
@@ -123,6 +129,7 @@
                         <outlet property="settingsTable" destination="qoB-9G-enb" id="ob6-Yz-EJB"/>
                         <outlet property="settingsView" destination="NqV-gD-8S1" id="lv3-gb-Nbo"/>
                         <outlet property="tileRack" destination="SgO-2l-r4W" id="VG9-ox-rAz"/>
+                        <outlet property="tilesView" destination="rtx-zU-CoX" id="yb9-f4-Hqw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qh2-T1-AhA" sceneMemberID="firstResponder"/>
