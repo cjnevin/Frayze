@@ -255,9 +255,12 @@
                 tile.pointLabel.layer.borderWidth = 1.f;
                 tile.pointLabel.frame = r;
                 tile.pointLabel.textAlignment = NSTextAlignmentCenter;
-                
             }
         }
+        colCount++;
+        UILabel *remaining = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + (50 * colCount), 300, 20)];
+        remaining.text = [NSString stringWithFormat:@"Tiles remaining in bag: %d", scrabble.bagTiles.count];
+        [tilesView addSubview:remaining];
         [tilesView.superview bringSubviewToFront:tilesView];
         [self animateView:tilesView alpha:alpha completion:^{
             [self animateView:settingsView alpha:0.0f completion:nil];
