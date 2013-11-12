@@ -259,7 +259,9 @@
         }
         colCount++;
         UILabel *remaining = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + (50 * colCount), 300, 20)];
-        remaining.text = [NSString stringWithFormat:@"Tiles remaining in bag: %d", scrabble.bagTiles.count];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"Tiles remaining in bag: " attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f]}];
+        [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", scrabble.bagTiles.count] attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]}]];
+        [remaining setAttributedText:attr];
         [tilesView addSubview:remaining];
         [tilesView.superview bringSubviewToFront:tilesView];
         [self animateView:tilesView alpha:alpha completion:^{
