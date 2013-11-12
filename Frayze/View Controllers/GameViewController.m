@@ -291,14 +291,19 @@
 
 - (void)playPressed:(id)sender
 {
-    if (![scrabble canSubmit]) {
-        [[[UIAlertView alloc] initWithTitle:@"Invalid Placement" message:@"Please place tiles horizontally/vertically." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    } else {
-        [self removeHighlights];
-        currentScore += [scrabble calculateScore:NO];
-        scoreLabel.text = [NSString stringWithFormat:@"%d", currentScore];
-        [scrabble submit];
-    }
+    [scrabble verifyValidityWithCompletion:^(NSInteger score, ValidityOptions status, NSString *message, NSArray *wordTilesArray) {
+        if (status == VO_VALID) {
+            [self removeHighlights];
+            for (NSArray *wordTiles in wordTilesArray) {
+                [self highlightTiles:wordTiles];
+            }
+            currentScore += score;
+            scoreLabel.text = [NSString stringWithFormat:@"%d", currentScore];
+            [scrabble submit];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"Invalid" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    }];
 }
 
 - (void)animateView:(UIView*)view alpha:(CGFloat)alpha completion:(void(^)(void))completion

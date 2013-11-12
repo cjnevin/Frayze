@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "CNScrabbleSquare.h"
+#import "CNScrabbleDictionary.h"
+
+typedef enum {
+    VO_VALID = 1,
+    VO_INVALID,
+    VO_NOT_INLINE,
+    VO_NOT_INTERSECTING_CENTER,
+    VO_NOT_INTERSECTING_CENTER_BY_PROXY,
+    VO_NOT_DEFINED,
+} ValidityOptions;
 
 @class CNScrabbleTile;
 
@@ -32,6 +42,7 @@
 @property (nonatomic, strong) NSMutableArray *board;
 @property (nonatomic, strong) NSMutableArray *bagTiles;
 @property (nonatomic, strong) NSMutableArray *playedTiles;
+@property (nonatomic, strong) CNScrabbleDictionary *dictionary;
 @property (nonatomic, strong) CNScrabbleTile *draggedTile;    // Tile being dragged
 
 + (NSDictionary*)letterValues;
@@ -48,8 +59,7 @@
 - (NSUInteger)tilesInRack;
 
 // Score
-- (BOOL)canSubmit;
 - (void)submit;
-- (NSInteger)calculateScore:(BOOL)auditing;
+- (void)verifyValidityWithCompletion:(void(^)(NSInteger score, ValidityOptions status, NSString *message, NSArray *wordTilesArray))completion;
 
 @end

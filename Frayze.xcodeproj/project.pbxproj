@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F35EF401832C47600A938FB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF371832C47600A938FB /* play.png */; };
+		9F35EF411832C47600A938FB /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF381832C47600A938FB /* play@2x.png */; };
+		9F35EF421832C47600A938FB /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF391832C47600A938FB /* settings.png */; };
+		9F35EF431832C47600A938FB /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3A1832C47600A938FB /* settings@2x.png */; };
+		9F35EF441832C47600A938FB /* shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3B1832C47600A938FB /* shuffle.png */; };
+		9F35EF451832C47600A938FB /* shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3C1832C47600A938FB /* shuffle@2x.png */; };
+		9F35EF461832C47600A938FB /* visible.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3D1832C47600A938FB /* visible.png */; };
+		9F35EF471832C47600A938FB /* visible@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3E1832C47600A938FB /* visible@2x.png */; };
+		9F35EF4A1832C4AC00A938FB /* CNScrabbleDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */; };
+		9F35EF4C1832CC8B00A938FB /* CSW12.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF4B1832CC8B00A938FB /* CSW12.plist */; };
 		9FE4087A1825B52A000972DD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE408791825B52A000972DD /* AudioToolbox.framework */; };
 		9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4087C1825BE7F000972DD /* SettingsDataSource.m */; };
 		9FF00D591822F0F80029D12E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D581822F0F80029D12E /* Foundation.framework */; };
@@ -41,6 +51,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F35EF371832C47600A938FB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		9F35EF381832C47600A938FB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
+		9F35EF391832C47600A938FB /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		9F35EF3A1832C47600A938FB /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
+		9F35EF3B1832C47600A938FB /* shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shuffle.png; sourceTree = "<group>"; };
+		9F35EF3C1832C47600A938FB /* shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shuffle@2x.png"; sourceTree = "<group>"; };
+		9F35EF3D1832C47600A938FB /* visible.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = visible.png; sourceTree = "<group>"; };
+		9F35EF3E1832C47600A938FB /* visible@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "visible@2x.png"; sourceTree = "<group>"; };
+		9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabbleDictionary.h; sourceTree = "<group>"; };
+		9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabbleDictionary.m; sourceTree = "<group>"; };
+		9F35EF4B1832CC8B00A938FB /* CSW12.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CSW12.plist; sourceTree = "<group>"; };
 		9FE408791825B52A000972DD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9FE4087B1825BE7F000972DD /* SettingsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDataSource.h; sourceTree = "<group>"; };
 		9FE4087C1825BE7F000972DD /* SettingsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDataSource.m; sourceTree = "<group>"; };
@@ -100,6 +121,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F12E27B183279DA00137BEC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9F35EF341832C47600A938FB /* Dictionaries */,
+				9F35EF361832C47600A938FB /* Images */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9F35EF341832C47600A938FB /* Dictionaries */ = {
+			isa = PBXGroup;
+			children = (
+				9F35EF4B1832CC8B00A938FB /* CSW12.plist */,
+			);
+			path = Dictionaries;
+			sourceTree = "<group>";
+		};
+		9F35EF361832C47600A938FB /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				9F35EF371832C47600A938FB /* play.png */,
+				9F35EF381832C47600A938FB /* play@2x.png */,
+				9F35EF391832C47600A938FB /* settings.png */,
+				9F35EF3A1832C47600A938FB /* settings@2x.png */,
+				9F35EF3B1832C47600A938FB /* shuffle.png */,
+				9F35EF3C1832C47600A938FB /* shuffle@2x.png */,
+				9F35EF3D1832C47600A938FB /* visible.png */,
+				9F35EF3E1832C47600A938FB /* visible@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		9FF00D4C1822F0F80029D12E = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +193,7 @@
 				9FF00D921822F1510029D12E /* Game Logic */,
 				9FF00D871822F14B0029D12E /* Utilities */,
 				9FF00D9C1822F15C0029D12E /* View Controllers */,
+				9F12E27B183279DA00137BEC /* Resources */,
 				9FF00D5F1822F0F80029D12E /* Supporting Files */,
 			);
 			path = Frayze;
@@ -202,6 +256,8 @@
 				9FF00D961822F1510029D12E /* CNScrabbleSquare.m */,
 				9FF00D971822F1510029D12E /* CNScrabbleTile.h */,
 				9FF00D981822F1510029D12E /* CNScrabbleTile.m */,
+				9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */,
+				9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */,
 			);
 			path = "Game Logic";
 			sourceTree = "<group>";
@@ -297,7 +353,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FF00D631822F0F80029D12E /* InfoPlist.strings in Resources */,
+				9F35EF421832C47600A938FB /* settings.png in Resources */,
+				9F35EF451832C47600A938FB /* shuffle@2x.png in Resources */,
+				9F35EF401832C47600A938FB /* play.png in Resources */,
+				9F35EF411832C47600A938FB /* play@2x.png in Resources */,
+				9F35EF471832C47600A938FB /* visible@2x.png in Resources */,
 				9FF00D6B1822F0F90029D12E /* Images.xcassets in Resources */,
+				9F35EF431832C47600A938FB /* settings@2x.png in Resources */,
+				9F35EF461832C47600A938FB /* visible.png in Resources */,
+				9F35EF4C1832CC8B00A938FB /* CSW12.plist in Resources */,
+				9F35EF441832C47600A938FB /* shuffle.png in Resources */,
 				9FF00DA11822F1A70029D12E /* Main_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +390,7 @@
 				9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */,
 				9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */,
 				9FF00D651822F0F80029D12E /* main.m in Sources */,
+				9F35EF4A1832C4AC00A938FB /* CNScrabbleDictionary.m in Sources */,
 				9FF00D901822F14B0029D12E /* UIColor+Scrabble.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

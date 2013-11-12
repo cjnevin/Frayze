@@ -24,6 +24,7 @@
 @synthesize bagTiles;
 @synthesize playedTiles;
 @synthesize draggedTile;
+@synthesize dictionary;
 
 + (NSDictionary*)letterDistribution
 {
@@ -84,6 +85,10 @@
     self = [super init];
     if (self) {
         delegate = _delegate;
+        // Create new dictionary from raw text file
+        //[[CNScrabbleDictionary alloc] initWithRawTextFile:@"CSW12"];
+        
+        dictionary = [[CNScrabbleDictionary alloc] initWithPlist:@"CSW12"];
     }
     return self;
 }
@@ -490,15 +495,19 @@
     return multiplier;
 }
 
-- (NSInteger)calculateScore:(BOOL)auditing
+- (void)verifyValidityWithCompletion:(void(^)(NSInteger score, ValidityOptions status, NSString *message, NSArray *wordTilesArray))completion
 {
-    NSInteger score = 0;
     // Ensure that tiles are in same row or column
     NSArray *tiles = [droppedTiles allObjects];
+    if (tiles.count == 0) {
+        completion(0, VO_INVALID, @"You need to drop at least one tile.", nil);
+        return;
+    }
     BOOL horizontal = [self tilesAreHorizontallyArranged:tiles];
     BOOL vertical = [self tilesAreVerticallyArranged:tiles];
     if (!horizontal && !vertical) {
-        return 0;
+        completion(0, VO_NOT_INLINE, @"Tiles must be arranged horizontally or vertically.", nil);
+        return;
     }
     // Determine tiles adjacent to dropped tiles
     NSMutableSet *adjacent = [NSMutableSet set];
@@ -507,6 +516,8 @@
     [self getAdjacentTiles:&adjacent x:tile.coord.x y:tile.coord.y v:NO h:YES original:tile];
     
     // This set must include all dropped tiles, otherwise they aren't connected
+    NSMutableArray *wordTilesArray = [NSMutableArray array];
+    NSUInteger score = 0;
     if ([self matchingObjectsInArray:[adjacent allObjects] withArray:[droppedTiles allObjects]] == [droppedTiles count]) {
         [adjacent removeAllObjects];
         // Ensure that there is a center tile
@@ -514,8 +525,8 @@
         CNScrabbleTile *midTile = [self getTileAtX:mid y:mid];
         if (!midTile) {
             // Tiles must intersect center of board
-            NSLog(@"Tile must intersect center of the board.");
-            return 0;
+            completion(0, VO_NOT_INTERSECTING_CENTER, @"Tiles must intersect center of the board.", nil);
+            return;
         }
         
         // Ensure that tiles intersect the center of the board
@@ -525,8 +536,8 @@
         midTile = [self getTileAtX:mid y:mid inArray:[adjacent allObjects]];
         if (!midTile) {
             // Tiles must intersect center of board
-            NSLog(@"Tile must intersect with tiles that intersect with the center tile.");
-            return 0;
+            completion(0, VO_NOT_INTERSECTING_CENTER_BY_PROXY, @"Tiles must intersect with tiles that intersect with the center tile.", nil);
+            return;
         }
         
         // Remove all objects, so we can find the connected tiles
@@ -540,62 +551,56 @@
         NSArray *adjArray = [adjacent allObjects];
         if (vertical) {
             NSArray *wordTiles = [self getTilesAtX:tile.coord.x inArray:adjArray];
-            NSUInteger wordScore = 0;
             if (wordTiles.count > 1) {
-                wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
-                if (!auditing) {
-                    NSLog(@"WordX = %@, %d", [self getWord:wordTiles], wordScore);
-                    [self.delegate highlightTiles:wordTiles];
+                NSString *word = [self getWord:wordTiles];
+                [wordTilesArray addObject:wordTiles];
+                if (![dictionary isWordValid:word]) {
+                    completion(0, VO_NOT_DEFINED, [word stringByAppendingString:@" is not defined."], wordTilesArray);
+                    return;
                 }
-                score += wordScore;
+                score += [self wordValueForTiles:wordTiles dropped:tiles];
             }
             // Calculate horizontal words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
                 wordTiles = [self getTilesAtY:dTile.coord.y inArray:adjArray];
                 if (wordTiles.count > 1) {
-                    wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
-                    if (!auditing) {
-                        NSLog(@"WordY = %@, %d", [self getWord:wordTiles], wordScore);
-                        [self.delegate highlightTiles:wordTiles];
+                    NSString *word = [self getWord:wordTiles];
+                    [wordTilesArray addObject:wordTiles];
+                    if (![dictionary isWordValid:word]) {
+                        completion(0, VO_NOT_DEFINED, [word stringByAppendingString:@" is not defined."], wordTilesArray);
+                        return;
                     }
-                    score += wordScore;
+                    score += [self wordValueForTiles:wordTiles dropped:tiles];
                 }
             }
         } else {
             NSArray *wordTiles = [self getTilesAtY:tile.coord.y inArray:adjArray];
-            NSUInteger wordScore = 0;
             if (wordTiles.count > 1) {
-                wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
-                if (!auditing) {
-                    NSLog(@"WordY = %@, %d", [self getWord:wordTiles], wordScore);
-                    [self.delegate highlightTiles:wordTiles];
+                NSString *word = [self getWord:wordTiles];
+                [wordTilesArray addObject:wordTiles];
+                if (![dictionary isWordValid:word]) {
+                    completion(0, VO_NOT_DEFINED, [word stringByAppendingString:@" is not defined."], wordTilesArray);
+                    return;
                 }
-                score += wordScore;
+                score += [self wordValueForTiles:wordTiles dropped:tiles];
             }
             // Calculate vertical words for each letter
             for (CNScrabbleTile *dTile in droppedTiles) {
                 wordTiles = [self getTilesAtX:dTile.coord.x inArray:adjArray];
                 if (wordTiles.count > 1) {
-                    wordScore = [self wordValueForTiles:wordTiles dropped:tiles];
-                    if (!auditing) {
-                        NSLog(@"WordX = %@, %d", [self getWord:wordTiles], wordScore);
-                        [self.delegate highlightTiles:wordTiles];
+                    NSString *word = [self getWord:wordTiles];
+                    [wordTilesArray addObject:wordTiles];
+                    if (![dictionary isWordValid:word]) {
+                        completion(0, VO_NOT_DEFINED, [word stringByAppendingString:@" is not defined."], wordTilesArray);
+                        return;
                     }
-                    score += wordScore;
+                    score += [self wordValueForTiles:wordTiles dropped:tiles];
                 }
             }
         }
     }
-    return score;
-}
-
-- (BOOL)canSubmit
-{
-    // Validate
-    if (droppedTiles.count == 0 || [self calculateScore:YES] < 1) {
-        return NO;
-    }
-    return YES;
+    // Valid?
+    completion(score, VO_VALID, @"", wordTilesArray);
 }
 
 - (void)submit
