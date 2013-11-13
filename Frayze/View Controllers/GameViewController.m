@@ -250,6 +250,7 @@
     }
     cell.textLabel.text = [searchResults[indexPath.row][NAME_KEY] lowercaseString];
     cell.detailTextLabel.text = searchResults[indexPath.row][DEF_KEY];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -314,7 +315,6 @@
 
 - (void)searchPressed:(id)sender
 {
-    //[self.searchDisplayController.searchBar.superview bringSubviewToFront:self.searchDisplayController.searchBar];
     [self.searchDisplayController setActive:YES animated:YES];
     [self.searchDisplayController.searchBar becomeFirstResponder];
 }
@@ -331,7 +331,7 @@
     }
     [scrabble setDrawnTiles:b];
     [sender setEnabled:NO];
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.35f animations:^{
         [self drewTiles];
     } completion:^(BOOL finished) {
         [sender setEnabled:YES];

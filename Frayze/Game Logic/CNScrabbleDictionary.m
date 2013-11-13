@@ -36,18 +36,18 @@
 #pragma mark - Plist Import
 
 - (void)populate:(NSString*)prefix letterDict:(NSDictionary*)letterDict array:(NSMutableArray*)array {
-    if ([[letterDict allKeys] containsObject:DEF_KEY]) {
-        [array addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
-    }
     for (NSString *key in [letterDict allKeys]) {
         if (![key isEqualToString:DEF_KEY]) {
             [self populate:[NSString stringWithFormat:@"%@%@", prefix, key] letterDict:letterDict[key] array:array];
+        } else {
+            [array addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
         }
     }
 }
 
 - (NSArray*)wordsBegginningWith:(NSString*)word
 {
+    if (word.length < 2) return nil;
     NSMutableString *buffer = [NSMutableString string];
     NSMutableArray *results = [NSMutableArray array];
     NSDictionary *letterDict = dictionary;
@@ -60,6 +60,9 @@
         letterDict = letterDict[letter];
         if (i == word.length - 1) {
             [self populate:buffer letterDict:letterDict array:results];
+            [results sortUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                return [obj1[NAME_KEY] compare:obj2[NAME_KEY] options:NSBackwardsSearch];
+            }];
             return results;
         }
     }
