@@ -21,8 +21,11 @@
 - (id)initWithPlist:(NSString*)name;
 - (id)initWithRawTextFile:(NSString*)rawTextFile;
 
+- (NSDictionary*)getDictionary;
+- (NSArray*)allWords;
 - (NSString*)definitionForWord:(NSString*)word;
 - (BOOL)isWordValid:(NSString*)word;
 - (NSArray*)wordsBegginningWith:(NSString*)word;
+- (void)wordsWithLetters:(NSArray*)letters prefix:(NSString*)prefix letterDict:(NSDictionary*)letterDict results:(NSMutableArray*)results;
 
 @end

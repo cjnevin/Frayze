@@ -55,12 +55,16 @@ typedef enum {
 
 // Board / Tiles
 - (CNScrabbleTile*)getTileAtX:(NSInteger)x y:(NSInteger)y;
+- (NSArray*)lettersForTiles:(NSArray*)tiles;
 - (CGRect)rectForTiles:(NSArray*)tiles;
 - (BOOL)isEmptyAtPoint:(CGPoint)point;
 - (void)drawTiles;
 - (void)resetGame;
 - (NSUInteger)boardSize;
 - (NSUInteger)tilesInRack;
+
+// AI
+- (NSArray*)determinePossibleWordsWithLetters:(NSArray*)letters;
 
 // Score
 - (void)submitWords:(NSMutableArray*)wordValues score:(NSUInteger)score;

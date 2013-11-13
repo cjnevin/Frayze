@@ -35,12 +35,46 @@
 
 #pragma mark - Plist Import
 
+- (NSDictionary*)getDictionary
+{
+    return dictionary;
+}
+
 - (void)populate:(NSString*)prefix letterDict:(NSDictionary*)letterDict array:(NSMutableArray*)array {
     for (NSString *key in [letterDict allKeys]) {
         if (![key isEqualToString:DEF_KEY]) {
-            [self populate:[NSString stringWithFormat:@"%@%@", prefix, key] letterDict:letterDict[key] array:array];
+            [self populate:[prefix stringByAppendingString:key] letterDict:letterDict[key] array:array];
         } else {
             [array addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
+        }
+    }
+}
+
+- (NSArray*)allWords
+{
+    // This method is slow, use at your own peril
+    NSMutableArray *results = [NSMutableArray array];
+    for (NSString *key in dictionary) {
+        [self populate:key letterDict:dictionary[key] array:results];
+    }
+    [results sortByKey:NAME_KEY];
+    return results;
+}
+
+- (void)wordsWithLetters:(NSArray*)letters prefix:(NSString*)prefix letterDict:(NSDictionary*)letterDict results:(NSMutableArray*)results
+{
+    if ([[letterDict allKeys] containsObject:DEF_KEY]) {
+        [results addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
+    }
+    for (NSString *key in [letterDict allKeys]) {
+        if ([letters containsObject:key]) {
+            NSInteger index = [letters indexOfObject:key];
+            NSMutableArray *copy = [NSMutableArray arrayWithArray:letters];
+            [copy removeObjectAtIndex:index];
+            [self wordsWithLetters:copy
+                            prefix:[NSString stringWithFormat:@"%@%@", prefix, key]
+                        letterDict:letterDict[key]
+                           results:results];
         }
     }
 }
@@ -60,9 +94,7 @@
         letterDict = letterDict[letter];
         if (i == word.length - 1) {
             [self populate:buffer letterDict:letterDict array:results];
-            [results sortUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
-                return [obj1[NAME_KEY] compare:obj2[NAME_KEY] options:NSBackwardsSearch];
-            }];
+            [results sortByKey:NAME_KEY];
             return results;
         }
     }

@@ -205,6 +205,7 @@
         tile.frame = CGRectMake(x, 5, tileWidth, tileWidth);
         [tileRack addSubview:tile];
     }
+    [scrabble determinePossibleWordsWithLetters:[scrabble lettersForTiles:scrabble.drawnTiles]];
 }
 
 - (void)tilesReset
@@ -240,6 +241,12 @@
     // HACK: Fix iOS7 content offsets
     self.searchDisplayController.searchResultsTableView.contentInset = UIEdgeInsetsZero;
     self.searchDisplayController.searchResultsTableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchResults = nil;
+    [self.searchDisplayController.searchResultsTableView reloadData];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText

@@ -14,5 +14,6 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "UIColor+Scrabble.h"
+    #import "NSMutableArray+CNResultSorting.h"
     #import "SettingsDataSource.h"
 #endif

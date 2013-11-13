@@ -17,6 +17,7 @@
 		9F35EF471832C47600A938FB /* visible@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3E1832C47600A938FB /* visible@2x.png */; };
 		9F35EF4A1832C4AC00A938FB /* CNScrabbleDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */; };
 		9F35EF4C1832CC8B00A938FB /* CSW12.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF4B1832CC8B00A938FB /* CSW12.plist */; };
+		9F7403B11834371600A1F5A3 /* NSMutableArray+CNResultSorting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7403B01834371600A1F5A3 /* NSMutableArray+CNResultSorting.m */; };
 		9FB5D5991833620F00D7DB97 /* magnifying_glass.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB5D5971833620F00D7DB97 /* magnifying_glass.png */; };
 		9FB5D59A1833620F00D7DB97 /* magnifying_glass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB5D5981833620F00D7DB97 /* magnifying_glass@2x.png */; };
 		9FB5D59D18336F7C00D7DB97 /* UIViewController+Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB5D59C18336F7C00D7DB97 /* UIViewController+Keyboard.m */; };
@@ -65,6 +66,8 @@
 		9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabbleDictionary.h; sourceTree = "<group>"; };
 		9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabbleDictionary.m; sourceTree = "<group>"; };
 		9F35EF4B1832CC8B00A938FB /* CSW12.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CSW12.plist; sourceTree = "<group>"; };
+		9F7403AF1834371600A1F5A3 /* NSMutableArray+CNResultSorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+CNResultSorting.h"; sourceTree = "<group>"; };
+		9F7403B01834371600A1F5A3 /* NSMutableArray+CNResultSorting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+CNResultSorting.m"; sourceTree = "<group>"; };
 		9FB5D5971833620F00D7DB97 /* magnifying_glass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = magnifying_glass.png; sourceTree = "<group>"; };
 		9FB5D5981833620F00D7DB97 /* magnifying_glass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifying_glass@2x.png"; sourceTree = "<group>"; };
 		9FB5D59B18336F7C00D7DB97 /* UIViewController+Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Keyboard.h"; sourceTree = "<group>"; };
@@ -261,6 +264,8 @@
 		9FF00D921822F1510029D12E /* Game Logic */ = {
 			isa = PBXGroup;
 			children = (
+				9F7403AF1834371600A1F5A3 /* NSMutableArray+CNResultSorting.h */,
+				9F7403B01834371600A1F5A3 /* NSMutableArray+CNResultSorting.m */,
 				9FF00D931822F1510029D12E /* CNScrabble.h */,
 				9FF00D941822F1510029D12E /* CNScrabble.m */,
 				9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */,
@@ -396,6 +401,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FF00D9B1822F1510029D12E /* CNScrabbleTile.m in Sources */,
+				9F7403B11834371600A1F5A3 /* NSMutableArray+CNResultSorting.m in Sources */,
 				9FF00D991822F1510029D12E /* CNScrabble.m in Sources */,
 				9FF00D9A1822F1510029D12E /* CNScrabbleSquare.m in Sources */,
 				9FB5D59D18336F7C00D7DB97 /* UIViewController+Keyboard.m in Sources */,

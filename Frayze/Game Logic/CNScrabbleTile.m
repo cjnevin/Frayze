@@ -14,6 +14,7 @@
 @synthesize pointLabel;
 @synthesize letterLabel;
 @synthesize coord;
+@synthesize letterString;
 
 - (void)applyTheme
 {

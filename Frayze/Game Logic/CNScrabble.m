@@ -270,6 +270,15 @@
     return !filled;
 }
 
+- (NSArray*)lettersForTiles:(NSArray*)tiles
+{
+    NSMutableArray *results = [NSMutableArray array];
+    for (CNScrabbleTile *tile in tiles) {
+        [results addObject:tile.letterString];
+    }
+    return results;
+}
+
 - (CGRect)rectForTiles:(NSArray*)tiles
 {
     CGFloat miny = CGFLOAT_MAX, minx = CGFLOAT_MAX;
@@ -629,6 +638,31 @@
     
     // Replace tiles in rack
     [self drawTiles];
+}
+
+#pragma mark - AI
+
+- (NSArray*)determinePossibleWordsWithLetters:(NSArray*)letters
+{
+    //if (playedTiles.count == 0) {
+        // The world is your oyster, you can play anything you like...
+        
+        // Determine words that contain these letters only
+        NSMutableArray *results = [NSMutableArray array];
+    [dictionary wordsWithLetters:letters prefix:@"" letterDict:dictionary.getDictionary results:results];
+    //}
+    [results sortByLengthOfKey:NAME_KEY];
+    
+    NSLog(@"Results = %@", results);
+    // Determine words that contain these letters at a minimum, determine missing letters to see if we can leverage another word that has already been played
+    
+    // Determine tiles that are in positions where a word may be played
+    
+    // Determine tile locations to ensure that if we play a word it remains inside the bounds of the board
+    
+    //
+    
+    return results;
 }
 
 @end
