@@ -11,8 +11,9 @@
 #import "CNScrabbleTile.h"
 #import "SettingsDataSource.h"
 
-@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate>
+@interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 {
+    NSArray *searchResults;
     SettingsDataSource *settingsDataSource;
     UIImage *lattice;
     UIImageView *latticeImage;

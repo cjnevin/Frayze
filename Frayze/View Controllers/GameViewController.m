@@ -8,6 +8,7 @@
 
 #import "GameViewController.h"
 #import "UIScrollView+Directions.h"
+#import "UIViewController+Keyboard.h"
 #import <AudioToolbox/AudioServices.h>
 
 @interface GameViewController ()
@@ -77,6 +78,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    [self registerKeyboard];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:THEME_CHANGED object:nil];
     
     boardContainer = [[UIView alloc] init];
@@ -96,10 +98,11 @@
     UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"shuffle"] style:UIBarButtonItemStyleBordered target:self action:@selector(shufflePressed:)];
     UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsPressed:)];
     UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"visible"] style:UIBarButtonItemStyleBordered target:self action:@selector(infoPressed:)];
+    UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"magnifying_glass"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchPressed:)];
     
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
-    spacer.width = 40.f;
-    [self.navigationItem setLeftBarButtonItems:@[settings, spacer, info]];
+    spacer.width = 20.f;
+    [self.navigationItem setLeftBarButtonItems:@[settings, spacer, info, spacer, search]];
     [self.navigationItem setRightBarButtonItems:@[play, spacer, shuffle]];
 
     [self.view bringSubviewToFront:tileRack];
@@ -211,6 +214,45 @@
     }
 }
 
+#pragma mark - Search
+
+- (void)keyboardDidHide:(NSNotification *)notification duration:(double)duration options:(UIViewAnimationOptions)options
+{
+    // HACK: Fix iOS7 content offsets
+    self.searchDisplayController.searchResultsTableView.contentInset = UIEdgeInsetsZero;
+    self.searchDisplayController.searchResultsTableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    searchResults = [scrabble.dictionary wordsBegginningWith:[searchText uppercaseString]];
+    [self.searchDisplayController.searchResultsTableView reloadData];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [searchResults count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f];
+        cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.f];
+    }
+    cell.textLabel.text = [searchResults[indexPath.row][NAME_KEY] lowercaseString];
+    cell.detailTextLabel.text = searchResults[indexPath.row][DEF_KEY];
+    return cell;
+}
+
 #pragma mark - Gestures
 
 - (void)themeChanged:(NSNotification*)notification
@@ -268,6 +310,13 @@
             [self animateView:settingsView alpha:0.0f completion:nil];
         }];
     }
+}
+
+- (void)searchPressed:(id)sender
+{
+    //[self.searchDisplayController.searchBar.superview bringSubviewToFront:self.searchDisplayController.searchBar];
+    [self.searchDisplayController setActive:YES animated:YES];
+    [self.searchDisplayController.searchBar becomeFirstResponder];
 }
 
 - (void)shufflePressed:(id)sender

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define DEF_KEY @"Def"
+#define NAME_KEY @"Name"
+
 @interface CNScrabbleDictionary : NSObject
 {
     NSDictionary *dictionary;
@@ -20,5 +23,6 @@
 
 - (NSString*)definitionForWord:(NSString*)word;
 - (BOOL)isWordValid:(NSString*)word;
+- (NSArray*)wordsBegginningWith:(NSString*)word;
 
 @end

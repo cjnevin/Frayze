@@ -17,6 +17,9 @@
 		9F35EF471832C47600A938FB /* visible@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF3E1832C47600A938FB /* visible@2x.png */; };
 		9F35EF4A1832C4AC00A938FB /* CNScrabbleDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */; };
 		9F35EF4C1832CC8B00A938FB /* CSW12.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F35EF4B1832CC8B00A938FB /* CSW12.plist */; };
+		9FB5D5991833620F00D7DB97 /* magnifying_glass.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB5D5971833620F00D7DB97 /* magnifying_glass.png */; };
+		9FB5D59A1833620F00D7DB97 /* magnifying_glass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB5D5981833620F00D7DB97 /* magnifying_glass@2x.png */; };
+		9FB5D59D18336F7C00D7DB97 /* UIViewController+Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB5D59C18336F7C00D7DB97 /* UIViewController+Keyboard.m */; };
 		9FE4087A1825B52A000972DD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE408791825B52A000972DD /* AudioToolbox.framework */; };
 		9FE4087D1825BE7F000972DD /* SettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE4087C1825BE7F000972DD /* SettingsDataSource.m */; };
 		9FF00D591822F0F80029D12E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF00D581822F0F80029D12E /* Foundation.framework */; };
@@ -62,6 +65,10 @@
 		9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNScrabbleDictionary.h; sourceTree = "<group>"; };
 		9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNScrabbleDictionary.m; sourceTree = "<group>"; };
 		9F35EF4B1832CC8B00A938FB /* CSW12.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CSW12.plist; sourceTree = "<group>"; };
+		9FB5D5971833620F00D7DB97 /* magnifying_glass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = magnifying_glass.png; sourceTree = "<group>"; };
+		9FB5D5981833620F00D7DB97 /* magnifying_glass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifying_glass@2x.png"; sourceTree = "<group>"; };
+		9FB5D59B18336F7C00D7DB97 /* UIViewController+Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Keyboard.h"; sourceTree = "<group>"; };
+		9FB5D59C18336F7C00D7DB97 /* UIViewController+Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Keyboard.m"; sourceTree = "<group>"; };
 		9FE408791825B52A000972DD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9FE4087B1825BE7F000972DD /* SettingsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsDataSource.h; sourceTree = "<group>"; };
 		9FE4087C1825BE7F000972DD /* SettingsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsDataSource.m; sourceTree = "<group>"; };
@@ -141,6 +148,8 @@
 		9F35EF361832C47600A938FB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				9FB5D5971833620F00D7DB97 /* magnifying_glass.png */,
+				9FB5D5981833620F00D7DB97 /* magnifying_glass@2x.png */,
 				9F35EF371832C47600A938FB /* play.png */,
 				9F35EF381832C47600A938FB /* play@2x.png */,
 				9F35EF391832C47600A938FB /* settings.png */,
@@ -243,6 +252,8 @@
 				9FF00D8C1822F14B0029D12E /* UIColor+Scrabble.m */,
 				9FF00D8D1822F14B0029D12E /* UIScrollView+Directions.h */,
 				9FF00D8E1822F14B0029D12E /* UIScrollView+Directions.m */,
+				9FB5D59B18336F7C00D7DB97 /* UIViewController+Keyboard.h */,
+				9FB5D59C18336F7C00D7DB97 /* UIViewController+Keyboard.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -252,12 +263,12 @@
 			children = (
 				9FF00D931822F1510029D12E /* CNScrabble.h */,
 				9FF00D941822F1510029D12E /* CNScrabble.m */,
+				9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */,
+				9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */,
 				9FF00D951822F1510029D12E /* CNScrabbleSquare.h */,
 				9FF00D961822F1510029D12E /* CNScrabbleSquare.m */,
 				9FF00D971822F1510029D12E /* CNScrabbleTile.h */,
 				9FF00D981822F1510029D12E /* CNScrabbleTile.m */,
-				9F35EF481832C4AC00A938FB /* CNScrabbleDictionary.h */,
-				9F35EF491832C4AC00A938FB /* CNScrabbleDictionary.m */,
 			);
 			path = "Game Logic";
 			sourceTree = "<group>";
@@ -352,9 +363,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FB5D59A1833620F00D7DB97 /* magnifying_glass@2x.png in Resources */,
 				9FF00D631822F0F80029D12E /* InfoPlist.strings in Resources */,
 				9F35EF421832C47600A938FB /* settings.png in Resources */,
 				9F35EF451832C47600A938FB /* shuffle@2x.png in Resources */,
+				9FB5D5991833620F00D7DB97 /* magnifying_glass.png in Resources */,
 				9F35EF401832C47600A938FB /* play.png in Resources */,
 				9F35EF411832C47600A938FB /* play@2x.png in Resources */,
 				9F35EF471832C47600A938FB /* visible@2x.png in Resources */,
@@ -385,6 +398,7 @@
 				9FF00D9B1822F1510029D12E /* CNScrabbleTile.m in Sources */,
 				9FF00D991822F1510029D12E /* CNScrabble.m in Sources */,
 				9FF00D9A1822F1510029D12E /* CNScrabbleSquare.m in Sources */,
+				9FB5D59D18336F7C00D7DB97 /* UIViewController+Keyboard.m in Sources */,
 				9FF00D691822F0F90029D12E /* AppDelegate.m in Sources */,
 				9FF00D9F1822F15C0029D12E /* GameViewController.m in Sources */,
 				9FF00D911822F14B0029D12E /* UIScrollView+Directions.m in Sources */,

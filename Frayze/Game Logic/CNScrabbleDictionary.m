@@ -9,8 +9,6 @@
 #import "CNScrabbleDictionary.h"
 #import <stdio.h>
 
-#define DEF_KEY @"Def"
-
 @implementation CNScrabbleDictionary
 
 @synthesize path = _path;
@@ -36,6 +34,37 @@
 }
 
 #pragma mark - Plist Import
+
+- (void)populate:(NSString*)prefix letterDict:(NSDictionary*)letterDict array:(NSMutableArray*)array {
+    if ([[letterDict allKeys] containsObject:DEF_KEY]) {
+        [array addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
+    }
+    for (NSString *key in [letterDict allKeys]) {
+        if (![key isEqualToString:DEF_KEY]) {
+            [self populate:[NSString stringWithFormat:@"%@%@", prefix, key] letterDict:letterDict[key] array:array];
+        }
+    }
+}
+
+- (NSArray*)wordsBegginningWith:(NSString*)word
+{
+    NSMutableString *buffer = [NSMutableString string];
+    NSMutableArray *results = [NSMutableArray array];
+    NSDictionary *letterDict = dictionary;
+    for (NSInteger i = 0; i < word.length; i++) {
+        NSString *letter = [word substringWithRange:NSMakeRange(i, 1)];
+        if (![[letterDict allKeys] containsObject:letter]) {
+            return results;
+        }
+        [buffer appendString:letter];
+        letterDict = letterDict[letter];
+        if (i == word.length - 1) {
+            [self populate:buffer letterDict:letterDict array:results];
+            return results;
+        }
+    }
+    return results;
+}
 
 - (NSString*)definitionForWord:(NSString*)word
 {
