@@ -268,6 +268,7 @@
         [self animateView:tilesView alpha:0.0f completion:nil];
     } else {
         [tilesView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [tilesView setContentSize:tilesView.bounds.size];
         static NSUInteger perRow = 6;
         NSUInteger rowCount = 0, colCount = 0;
         for (char c = 'A'; c <= 'Z'; c++) {
@@ -300,13 +301,35 @@
                 tile.pointLabel.textAlignment = NSTextAlignmentCenter;
             }
         }
-        colCount++;
-        UILabel *remaining = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + (50 * colCount), 300, 20)];
-        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"Tiles remaining in bag: " attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f]}];
-        [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", scrabble.bagTiles.count] attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]}]];
-        [remaining setAttributedText:attr];
-        [tilesView addSubview:remaining];
+        if (rowCount > 0) {
+            colCount++;
+        }
+        NSDictionary *lightAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f]};
+        NSDictionary *boldAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]};
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
+        [attr appendAttributedString:[[NSAttributedString alloc] initWithString:@"Tiles remaining in bag: " attributes:lightAttributes]];
+        [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d\n\n", scrabble.bagTiles.count] attributes:boldAttributes]];
+        
+        for (NSDictionary *history in scrabble.playedHistory) {
+            NSString *words = [history[HISTORY_WORDS_KEY] componentsJoinedByString:@", "];
+            NSUInteger score = [history[HISTORY_SCORE_KEY] unsignedIntegerValue];
+            [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[words stringByAppendingString:@" - "] attributes:lightAttributes]];
+            [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d\n", score] attributes:boldAttributes]];
+        }
+        
+        CGRect paragraphRect = [attr boundingRectWithSize:CGSizeMake(300, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+        paragraphRect.origin = CGPointMake(10, 10 + (50 *colCount));
+        paragraphRect.size.height = ceil(paragraphRect.size.height);
+        paragraphRect.size.width = ceil(paragraphRect.size.width);
+        UILabel *label = [[UILabel alloc] initWithFrame:paragraphRect];
+        [label setNumberOfLines:0];
+        [label setLineBreakMode:NSLineBreakByWordWrapping];
+        [label setAttributedText:attr];
+        [tilesView addSubview:label];
         [tilesView.superview bringSubviewToFront:tilesView];
+        CGRect r = [tilesView convertRect:label.frame toView:tilesView.superview];
+        [tilesView setContentSize:CGSizeMake(320, r.origin.y + r.size.height + 44)];
+        
         [self animateView:tilesView alpha:alpha completion:^{
             [self animateView:settingsView alpha:0.0f completion:nil];
         }];
@@ -343,12 +366,18 @@
     [scrabble verifyValidityWithCompletion:^(NSInteger score, ValidityOptions status, NSString *message, NSArray *wordTilesArray) {
         if (status == VO_VALID) {
             [self removeHighlights];
+            NSMutableArray *words = [NSMutableArray array];
             for (NSArray *wordTiles in wordTilesArray) {
+                NSMutableString *word = [NSMutableString string];
+                for (CNScrabbleTile *tile in wordTiles) {
+                    [word appendString:tile.letterLabel.text];
+                }
+                [words addObject:word];
                 [self highlightTiles:wordTiles];
             }
             currentScore += score;
             scoreLabel.text = [NSString stringWithFormat:@"%d", currentScore];
-            [scrabble submit];
+            [scrabble submitWords:words score:score];
         } else {
             [[[UIAlertView alloc] initWithTitle:@"Invalid" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }

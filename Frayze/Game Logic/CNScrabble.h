@@ -10,6 +10,9 @@
 #import "CNScrabbleSquare.h"
 #import "CNScrabbleDictionary.h"
 
+#define HISTORY_WORDS_KEY @"HWK"
+#define HISTORY_SCORE_KEY @"HSK"
+
 typedef enum {
     VO_VALID = 1,
     VO_INVALID,
@@ -42,6 +45,7 @@ typedef enum {
 @property (nonatomic, strong) NSMutableArray *board;
 @property (nonatomic, strong) NSMutableArray *bagTiles;
 @property (nonatomic, strong) NSMutableArray *playedTiles;
+@property (nonatomic, strong) NSMutableArray *playedHistory;
 @property (nonatomic, strong) CNScrabbleDictionary *dictionary;
 @property (nonatomic, strong) CNScrabbleTile *draggedTile;    // Tile being dragged
 
@@ -59,7 +63,7 @@ typedef enum {
 - (NSUInteger)tilesInRack;
 
 // Score
-- (void)submit;
+- (void)submitWords:(NSMutableArray*)wordValues score:(NSUInteger)score;
 - (void)verifyValidityWithCompletion:(void(^)(NSInteger score, ValidityOptions status, NSString *message, NSArray *wordTilesArray))completion;
 
 @end

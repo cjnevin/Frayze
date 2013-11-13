@@ -25,6 +25,7 @@
 @synthesize playedTiles;
 @synthesize draggedTile;
 @synthesize dictionary;
+@synthesize playedHistory;
 
 + (NSDictionary*)letterDistribution
 {
@@ -603,15 +604,22 @@
     completion(score, VO_VALID, @"", wordTilesArray);
 }
 
-- (void)submit
+- (void)submitWords:(NSMutableArray*)wordValues score:(NSUInteger)score
 {
     // Store word
     CGRect rect = [self rectForTiles:[droppedTiles allObjects]];
     NSDictionary *word = @{@"rect": NSStringFromCGRect(rect), @"tiles": droppedTiles};
     if (!words) words = [NSMutableArray array];
-    if (!playedTiles) playedTiles = [NSMutableArray array];
     [words addObject:word];
+    
+    // Store played tiles
+    if (!playedTiles) playedTiles = [NSMutableArray array];
     [playedTiles addObjectsFromArray:[droppedTiles allObjects]];
+    
+    // Store history
+    if (!playedHistory) playedHistory = [NSMutableArray array];
+    [playedHistory addObject:@{HISTORY_SCORE_KEY: [NSNumber numberWithUnsignedInteger:score],
+                               HISTORY_WORDS_KEY: wordValues}];
     
     // Strip gestures
     for (CNScrabbleTile *tile in droppedTiles) {
