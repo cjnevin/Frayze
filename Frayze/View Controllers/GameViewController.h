@@ -13,10 +13,13 @@
 
 @interface GameViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate, CNScrabbleDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 {
+    CNScrabbleTile *pendingTile;
     NSArray *searchResults;
     SettingsDataSource *settingsDataSource;
     UIImage *lattice;
     UIImageView *latticeImage;
+    IBOutlet UIView *selectTileBackground;
+    IBOutlet UIView *selectTileView;
     IBOutlet UIView *tileRack, *settingsView;
     IBOutlet UITableView *settingsTable;
     IBOutlet UIScrollView *tilesView;

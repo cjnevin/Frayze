@@ -73,6 +73,21 @@
     return image;
 }
 
+- (void)restoreNavigation:(BOOL)animated
+{
+    UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"play"] style:UIBarButtonItemStyleBordered target:self action:@selector(playPressed:)];
+    UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"shuffle"] style:UIBarButtonItemStyleBordered target:self action:@selector(shufflePressed:)];
+    UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsPressed:)];
+    UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"visible"] style:UIBarButtonItemStyleBordered target:self action:@selector(infoPressed:)];
+    UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"magnifying_glass"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchPressed:)];
+    
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+    spacer.width = 20.f;
+    [self.navigationItem setLeftBarButtonItems:@[settings, spacer, info, spacer, search] animated:animated];
+    [self.navigationItem setRightBarButtonItems:@[play, spacer, shuffle] animated:animated];
+    [self.navigationItem setTitle:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -94,17 +109,21 @@
     [boardScroller setContentInset:UIEdgeInsetsZero];
     [boardScroller.layer setBorderWidth:1.0f];
     
-    UIBarButtonItem *play = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"play"] style:UIBarButtonItemStyleBordered target:self action:@selector(playPressed:)];
-    UIBarButtonItem *shuffle = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"shuffle"] style:UIBarButtonItemStyleBordered target:self action:@selector(shufflePressed:)];
-    UIBarButtonItem *settings = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsPressed:)];
-    UIBarButtonItem *info = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"visible"] style:UIBarButtonItemStyleBordered target:self action:@selector(infoPressed:)];
-    UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"magnifying_glass"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchPressed:)];
+    // Create letters to pick
+    NSUInteger row = 0, col = 0;
+    for (char c = 'A'; c <= 'Z'; c++) {
+        NSString *letter = [NSString stringWithFormat:@"%c", c];
+        CNScrabbleTile *tile = [[CNScrabbleTile alloc] initWithFrame:CGRectMake(4 + (row * 44), 4 + (col * 44), 40, 40) letter:letter];
+        [tile addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectLetter:)]];
+        [selectTileView addSubview:tile];
+        row++;
+        if (row >= 6) {
+            row = 0;
+            col++;
+        }
+    }
     
-    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
-    spacer.width = 20.f;
-    [self.navigationItem setLeftBarButtonItems:@[settings, spacer, info, spacer, search]];
-    [self.navigationItem setRightBarButtonItems:@[play, spacer, shuffle]];
-
+    [self restoreNavigation:NO];
     [self.view bringSubviewToFront:tileRack];
     [self.view bringSubviewToFront:settingsView];
     
@@ -254,7 +273,7 @@
     return cell;
 }
 
-#pragma mark - Gestures
+#pragma mark - Interaction
 
 - (void)themeChanged:(NSNotification*)notification
 {
@@ -338,8 +357,13 @@
 
 - (void)searchPressed:(id)sender
 {
-    [self.searchDisplayController setActive:YES animated:YES];
-    [self.searchDisplayController.searchBar becomeFirstResponder];
+    [UIView animateWithDuration:0.35f animations:^{
+        [tilesView setAlpha:0.0f];
+        [settingsView setAlpha:0.0f];
+    } completion:^(BOOL finished) {
+        [self.searchDisplayController setActive:YES animated:YES];
+        [self.searchDisplayController.searchBar becomeFirstResponder];
+    }];
 }
 
 - (void)shufflePressed:(id)sender
@@ -474,6 +498,21 @@
      }*/
 }
 
+- (void)selectLetter:(UITapGestureRecognizer*)tap
+{
+    if (pendingTile) {
+        CNScrabbleTile *tile = (CNScrabbleTile*)[tap view];
+        pendingTile.letterLabel.text = [[tile letterLabel] text];
+        [self restoreNavigation:YES];
+        [UIView animateWithDuration:0.35f animations:^{
+            selectTileView.alpha = 0.0f;
+            selectTileBackground.alpha = 0.0f;
+        } completion:^(BOOL finished) {
+            pendingTile = nil;
+        }];
+    }
+}
+
 - (void)doubleTapBoard:(UITapGestureRecognizer*)gesture
 {
     if (boardScroller.zoomScale == 1.0f) {
@@ -548,7 +587,24 @@
                                 [[scrabble drawnTiles] removeObject:t];
                                 [[scrabble droppedTiles] addObject:t];
                                 if ([[[t letterLabel] text] isEqualToString:@"?"]) {
-                                    // TODO: Present Selector
+                                    // Present Selector
+                                    [self.navigationItem setRightBarButtonItems:nil animated:YES];
+                                    [self.navigationItem setLeftBarButtonItems:nil animated:YES];
+                                    [self.navigationItem setTitle:@"Select Letter"];
+                                    pendingTile = t;
+                                    selectTileView.backgroundColor = [UIColor tileRackColor];
+                                    selectTileView.layer.shadowRadius = 2.f;
+                                    selectTileView.layer.shadowOffset = CGSizeMake(1, 1);
+                                    selectTileView.layer.shadowOpacity = 0.7f;
+                                    selectTileView.layer.cornerRadius = 5.f;
+                                    [selectTileBackground.superview bringSubviewToFront:selectTileBackground];
+                                    [selectTileView.superview bringSubviewToFront:selectTileView];
+                                    [UIView animateWithDuration:0.35f animations:^{
+                                        selectTileView.alpha = 1.0f;
+                                        selectTileBackground.alpha = 0.5f;
+                                    } completion:^(BOOL finished) {
+                                        
+                                    }];
                                 }
                                 // Vibrate on drop?
                                 //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

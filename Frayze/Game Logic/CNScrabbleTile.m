@@ -19,7 +19,7 @@
 {
     [letterLabel setTextColor:[UIColor tileTextColor]];
     [letterLabel setBackgroundColor:[UIColor tileColor]];
-    [self.layer setBorderColor:[UIColor tileBorderColor].CGColor];
+    [letterLabel.layer setBorderColor:[UIColor tileBorderColor].CGColor];
     [pointLabel setTextColor:[UIColor tileTextColor]];
 }
 
@@ -28,6 +28,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        letterString = letter;
         CGRect subFrame = CGRectMake(0, 0, frame.size.width, frame.size.height);
         letterLabel = [[UILabel alloc] initWithFrame:subFrame];
         [letterLabel setText:letter];
@@ -36,7 +37,8 @@
         [letterLabel setAdjustsFontSizeToFitWidth:YES];
         [letterLabel setTextAlignment:NSTextAlignmentCenter];
         [letterLabel setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [self.layer setBorderWidth:1.0f];
+        [letterLabel.layer setBorderWidth:1.0f];
+        [letterLabel.layer setCornerRadius:5.f];
         [self addSubview:letterLabel];
         
         NSInteger value = [self letterValue];
@@ -59,7 +61,7 @@
 - (NSInteger)letterValue
 {
     NSDictionary *dict = [CNScrabble letterValues];
-    NSString *letter = letterLabel.text;
+    NSString *letter = letterString;
     for (NSString *s in [dict allKeys]) {
         if ([s rangeOfString:letter].location != NSNotFound) {
             return [dict[s] integerValue];

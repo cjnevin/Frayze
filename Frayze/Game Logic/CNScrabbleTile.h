@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface CNScrabbleTile : UIView
+{
+    NSString *letterString;
+}
 
 @property (nonatomic, strong) UILabel *letterLabel;
 @property (nonatomic, strong) UILabel *pointLabel;
