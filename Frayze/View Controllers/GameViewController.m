@@ -251,7 +251,7 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    searchResults = [scrabble.dictionary wordsBegginningWith:[searchText uppercaseString]];
+    searchResults = [scrabble.dictionary wordsComparableWith:[searchText uppercaseString]];
     [self.searchDisplayController.searchResultsTableView reloadData];
 }
 

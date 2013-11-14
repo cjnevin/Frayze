@@ -26,6 +26,7 @@
 - (NSString*)definitionForWord:(NSString*)word;
 - (BOOL)isWordValid:(NSString*)word;
 - (NSArray*)wordsBegginningWith:(NSString*)word;
+- (NSArray*)wordsComparableWith:(NSString*)word;
 - (void)wordsWithLetters:(NSArray*)letters prefix:(NSString*)prefix letterDict:(NSDictionary*)letterDict results:(NSMutableArray*)results;
 
 @end

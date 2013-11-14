@@ -87,6 +87,27 @@
     }
 }
 
+- (NSArray*)lettersForWord:(NSString*)word
+{
+    NSMutableArray *letters = [NSMutableArray array];
+    for (NSInteger i = 0; i < word.length; i++) {
+        [letters addObject:[word substringWithRange:NSMakeRange(i, 1)]];
+    }
+    return letters;
+}
+
+- (NSArray*)wordsComparableWith:(NSString*)word
+{
+    NSMutableSet *results = [NSMutableSet set];
+    NSMutableArray *matching = [NSMutableArray array];
+    [self wordsWithLetters:[self lettersForWord:word] prefix:@"" letterDict:dictionary results:matching];
+    [results addObjectsFromArray:[self wordsBegginningWith:word]];
+    [results addObjectsFromArray:matching];
+    NSMutableArray *sorted = [NSMutableArray arrayWithArray:[results allObjects]];
+    [sorted sortByKey:NAME_KEY];
+    return sorted;
+}
+
 - (NSArray*)wordsBegginningWith:(NSString*)word
 {
     if (word.length < 2) return nil;
