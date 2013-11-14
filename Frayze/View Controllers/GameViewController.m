@@ -6,6 +6,16 @@
 //  Copyright (c) 2013 CJNevin. All rights reserved.
 //
 
+//  TODO: Improvements
+//  Dropping a tile should find closest neighbour if the tile is already occupied
+//  Dragging from board should move tile to board superview
+//  Prompt before committing settings changes
+//  Better themes, actual theming
+//  Gradients on tiles, squares, rack
+//  Alternating colours in search results
+//  Add additional languages, need dictionaries with definitions
+//  CPU AI - difficulty levels based on length/score associated with a word
+
 #import "GameViewController.h"
 #import "UIScrollView+Directions.h"
 #import "UIViewController+Keyboard.h"
@@ -205,7 +215,9 @@
         tile.frame = CGRectMake(x, 5, tileWidth, tileWidth);
         [tileRack addSubview:tile];
     }
-    [scrabble determinePossibleWordsWithLetters:[scrabble lettersForTiles:scrabble.drawnTiles]];
+    if ([[scrabble droppedTiles] count] == 0) {
+        [scrabble determinePossibleWordsWithLetters:[scrabble lettersForTiles:scrabble.drawnTiles]];
+    }
 }
 
 - (void)tilesReset
