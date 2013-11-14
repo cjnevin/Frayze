@@ -67,7 +67,15 @@
         [results addObject:@{NAME_KEY: prefix, DEF_KEY: letterDict[DEF_KEY]}];
     }
     for (NSString *key in [letterDict allKeys]) {
-        if ([letters containsObject:key]) {
+        if ([letters containsObject:@"?"]) {
+            NSInteger index = [letters indexOfObject:@"?"];
+            NSMutableArray *copy = [NSMutableArray arrayWithArray:letters];
+            [copy removeObjectAtIndex:index];
+            [self wordsWithLetters:copy
+                            prefix:[NSString stringWithFormat:@"%@%@", prefix, key]
+                        letterDict:letterDict[key]
+                           results:results];
+        } else if ([letters containsObject:key]) {
             NSInteger index = [letters indexOfObject:key];
             NSMutableArray *copy = [NSMutableArray arrayWithArray:letters];
             [copy removeObjectAtIndex:index];
