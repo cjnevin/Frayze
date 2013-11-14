@@ -50,7 +50,7 @@
     }
 }
 
-- (NSArray*)allWords
+- (NSMutableArray*)allWords
 {
     // This method is slow, use at your own peril
     NSMutableArray *results = [NSMutableArray array];
@@ -87,7 +87,7 @@
     }
 }
 
-- (NSArray*)lettersForWord:(NSString*)word
+- (NSMutableArray*)lettersForWord:(NSString*)word
 {
     NSMutableArray *letters = [NSMutableArray array];
     for (NSInteger i = 0; i < word.length; i++) {
@@ -98,17 +98,16 @@
 
 - (NSArray*)wordsComparableWith:(NSString*)word
 {
-    NSMutableSet *results = [NSMutableSet set];
+    if (word.length < 2) return nil;
     NSMutableArray *matching = [NSMutableArray array];
     [self wordsWithLetters:[self lettersForWord:word] prefix:@"" letterDict:dictionary results:matching];
-    [results addObjectsFromArray:[self wordsBegginningWith:word]];
-    [results addObjectsFromArray:matching];
-    NSMutableArray *sorted = [NSMutableArray arrayWithArray:[results allObjects]];
-    [sorted sortByKey:NAME_KEY];
-    return sorted;
+    NSMutableArray *startingWith = [self wordsBegginningWith:word];
+    [startingWith sortByKey:NAME_KEY];
+    [matching removeObjectsInArray:startingWith];
+    return [startingWith arrayByAddingObjectsFromArray:matching];
 }
 
-- (NSArray*)wordsBegginningWith:(NSString*)word
+- (NSMutableArray*)wordsBegginningWith:(NSString*)word
 {
     if (word.length < 2) return nil;
     NSMutableString *buffer = [NSMutableString string];

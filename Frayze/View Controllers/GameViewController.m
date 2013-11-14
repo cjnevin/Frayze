@@ -249,10 +249,16 @@
     [self.searchDisplayController.searchResultsTableView reloadData];
 }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+- (void)doSearchWithText:(NSString*)searchText
 {
     searchResults = [scrabble.dictionary wordsComparableWith:[searchText uppercaseString]];
     [self.searchDisplayController.searchResultsTableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [GameViewController cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(doSearchWithText:) withObject:searchText afterDelay:0.5f];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -265,6 +271,16 @@
     return [searchResults count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *def = searchResults[indexPath.row][DEF_KEY];
+    CGSize constraint = CGSizeMake(300, CGFLOAT_MAX);
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:14.f]};
+    CGSize size = [def boundingRectWithSize:constraint options: NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+    size = CGSizeMake(ceil(size.width), ceil(size.height));
+    return 35 + size.height;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -273,6 +289,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f];
         cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.f];
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     cell.textLabel.text = [searchResults[indexPath.row][NAME_KEY] lowercaseString];
     cell.detailTextLabel.text = searchResults[indexPath.row][DEF_KEY];

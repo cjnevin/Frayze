@@ -22,10 +22,10 @@
 - (id)initWithRawTextFile:(NSString*)rawTextFile;
 
 - (NSDictionary*)getDictionary;
-- (NSArray*)allWords;
+- (NSMutableArray*)allWords;
 - (NSString*)definitionForWord:(NSString*)word;
 - (BOOL)isWordValid:(NSString*)word;
-- (NSArray*)wordsBegginningWith:(NSString*)word;
+- (NSMutableArray*)wordsBegginningWith:(NSString*)word;
 - (NSArray*)wordsComparableWith:(NSString*)word;
 - (void)wordsWithLetters:(NSArray*)letters prefix:(NSString*)prefix letterDict:(NSDictionary*)letterDict results:(NSMutableArray*)results;
 
