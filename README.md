@@ -4,4 +4,8 @@ This was just a fun side project I worked on for a few nights after work, I may 
 
 Most of the game logic is there however there is no AI yet.
 
+======
+
+This project has been deprecated.
+
 For a more complete and Swift version see [Papyrus](https://github.com/ChrisAU/Papyrus).
